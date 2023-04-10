@@ -52,9 +52,9 @@ class ProductOverViewScreen extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            crossAxisSpacing: 3 / 2,
+            childAspectRatio: 3 / 2,
             mainAxisSpacing: 10,
-            mainAxisExtent: 10),
+            crossAxisSpacing: 10),
         itemBuilder: (context, index) => ProductItem(loadedProducts[index].id,
             loadedProducts[index].title, loadedProducts[index].imageUrl),
       ),
