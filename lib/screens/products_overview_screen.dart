@@ -45,6 +45,7 @@ class ProductOverViewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('My Shop'),
       ),
       body: GridView.builder(
