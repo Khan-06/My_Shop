@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 
 import 'screens/products_overview_screen.dart';
 
@@ -10,7 +12,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'MyShop',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.orange)
+            .copyWith(secondary: Colors.amber),
+        textTheme: GoogleFonts.latoTextTheme()
       ),
       home: ProductOverViewScreen(),
     );
