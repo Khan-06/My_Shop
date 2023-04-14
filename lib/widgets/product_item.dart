@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_shop/screens/product_details_screen.dart';
 
 class ProductItem extends StatelessWidget {
   ProductItem(this.id, this.title, this.imageURL, {super.key});
@@ -26,7 +27,9 @@ class ProductItem extends StatelessWidget {
             icon: const Icon(Icons.shopping_cart),
           ),
         ),
-        child: Image.network(imageURL, fit: BoxFit.cover),
+        child: GestureDetector(
+          onTap: (){Navigator.push(context, MaterialPageRoute(builder: (ctx) => ProductDetails(title)));},
+            child: Image.network(imageURL, fit: BoxFit.cover)),
       ),
     );
   }
