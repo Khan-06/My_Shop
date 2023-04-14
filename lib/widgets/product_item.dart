@@ -28,8 +28,11 @@ class ProductItem extends StatelessWidget {
           ),
         ),
         child: GestureDetector(
-          onTap: (){Navigator.push(context, MaterialPageRoute(builder: (ctx) => ProductDetails(title)));},
-            child: Image.network(imageURL, fit: BoxFit.cover)),
+          onTap: () {
+            Navigator.pushNamed(context, ProductDetails.routeName, arguments: id);
+          },
+          child: Image.network(imageURL, fit: BoxFit.cover),
+        ),
       ),
     );
   }

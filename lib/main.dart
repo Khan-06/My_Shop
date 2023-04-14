@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_shop/screens/product_details_screen.dart';
 
 
 import 'screens/products_overview_screen.dart';
@@ -17,6 +18,9 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.latoTextTheme()
       ),
       home: ProductOverViewScreen(),
+      routes: {
+        ProductDetails.routeName: (ctx) => ProductDetails()
+      },
     );
   }
 }
