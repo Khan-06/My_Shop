@@ -43,6 +43,9 @@ class ProductsProvider with ChangeNotifier {
     return [..._items];
     }
 
+    Product findById (String Id){
+    return items.firstWhere((element) => element.id == Id);
+    }
   void addProducts () {
     notifyListeners();
   }
