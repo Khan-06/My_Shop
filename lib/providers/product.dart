@@ -1,5 +1,7 @@
 
-class Product {
+import 'package:flutter/material.dart';
+
+class Product with ChangeNotifier  {
   final String id;
   final String title;
   final double price;
@@ -14,4 +16,9 @@ class Product {
     required this.title,
     required this.imageUrl,
     required this.price});
+
+  void toggleFavorite(){
+    isFavorite = !isFavorite;
+    notifyListeners();
+  }
 }
