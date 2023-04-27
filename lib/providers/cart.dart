@@ -14,11 +14,14 @@ class CartItem {
 }
 
 class Cart with ChangeNotifier {
-  Map<String, CartItem> _items = [] as Map<String, CartItem>;
+   Map<String, CartItem> _items = {};
 
   Map<String, CartItem> get items {
     return {..._items};
   }
+  int get itemCount {
+    return items == null ? 0 :items.length;
+}
 
   void addItem(String productID, String title, double price) {
     if (_items.containsKey(productID)) {
@@ -40,6 +43,7 @@ class Cart with ChangeNotifier {
             price: price,
             quantity: 1),
       );
+      notifyListeners();
     }
   }
 }
