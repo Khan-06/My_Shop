@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import './screens/product_details_screen.dart';
+import './screens/cart_screen.dart';
 import './providers/cart.dart';
 import './screens/products_overview_screen.dart';
 import './providers/product_provider.dart';
@@ -22,12 +23,13 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'MyShop',
-        theme: ThemeData(
+        theme: ThemeData.light().copyWith(
             colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.orange)
                 .copyWith(secondary: Colors.amber),
             textTheme: GoogleFonts.latoTextTheme()),
         home: const ProductOverViewScreen(),
-        routes: {ProductDetails.routeName: (ctx) => ProductDetails()},
+        routes: {ProductDetails.routeName: (ctx) => ProductDetails(),
+        CartScreen.routeName: (ctx) => const CartScreen()},
       ),
     );
   }
