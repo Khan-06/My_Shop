@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class CartItem {
   CartItem(
@@ -52,5 +51,10 @@ double get totalAmount {
       );
       notifyListeners();
     }
+  }
+
+  void removeItem (String productId){
+    _items.remove(productId);
+    notifyListeners();
   }
 }
