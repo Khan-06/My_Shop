@@ -4,23 +4,45 @@ import 'package:provider/provider.dart';
 import '../providers/product_provider.dart';
 
 class ProductDetails extends StatelessWidget {
-
   static const routeName = '/product-detail';
 
   @override
   Widget build(BuildContext context) {
-
     final productId = ModalRoute.of(context)?.settings.arguments as String;
     final product = Provider.of<ProductsProvider>(context);
-    final productData = product.items.firstWhere((element) => element.id == productId);
+    final productData =
+        product.items.firstWhere((element) => element.id == productId);
 
-
-    return  Scaffold(
+    return Scaffold(
       appBar: AppBar(
-        title:  Text(productData.title),
+        title: Text(productData.title),
       ),
-      body:  Center(
-        child: Text(productData.description),
-      ),);
+      body: Column(
+        children: [
+          SizedBox(
+            height: 300,
+            width: double.infinity,
+            child: Image.network(
+              productData.imageUrl,
+              fit: BoxFit.cover,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            '\$${productData.price}',
+            style: const TextStyle(color: Colors.grey, fontSize: 20),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+              width: double.infinity,
+              child: Text(
+                productData.description,
+                textAlign: TextAlign.center,
+                softWrap: true,
+              ))
+        ],
+      ),
+    );
   }
 }
