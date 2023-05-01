@@ -57,4 +57,9 @@ double get totalAmount {
     _items.remove(productId);
     notifyListeners();
   }
+
+  void clear (){
+    _items = {};
+    notifyListeners();
+  }
 }

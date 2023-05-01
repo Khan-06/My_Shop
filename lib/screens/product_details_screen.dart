@@ -20,7 +20,7 @@ class ProductDetails extends StatelessWidget {
       body: Column(
         children: [
           SizedBox(
-            height: 300,
+            height: MediaQuery.of(context).size.height / 2,
             width: double.infinity,
             child: Image.network(
               productData.imageUrl,
