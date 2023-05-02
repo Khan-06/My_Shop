@@ -8,6 +8,7 @@ import './providers/cart.dart';
 import './screens/products_overview_screen.dart';
 import './providers/product_provider.dart';
 import './providers/orders.dart';
+import './screens/orders_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,7 +21,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (ctx) => ProductsProvider()),
         ChangeNotifierProvider(create: (ctx) => Cart()),
-        ChangeNotifierProvider(create: (context) => Orders(),)
+        ChangeNotifierProvider(
+          create: (context) => Orders(),
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -30,8 +33,11 @@ class MyApp extends StatelessWidget {
                 .copyWith(secondary: Colors.amber),
             textTheme: GoogleFonts.latoTextTheme()),
         home: const ProductOverViewScreen(),
-        routes: {ProductDetails.routeName: (ctx) => ProductDetails(),
-        CartScreen.routeName: (ctx) => const CartScreen()},
+        routes: {
+          ProductDetails.routeName: (ctx) => ProductDetails(),
+          CartScreen.routeName: (ctx) => const CartScreen(),
+          OrdersScreen.routeName: (context) => const OrdersScreen(),
+        },
       ),
     );
   }
