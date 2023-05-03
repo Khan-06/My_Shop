@@ -26,7 +26,7 @@ class Orders with ChangeNotifier {
     _orders.insert(
       0,
       OrderItem(
-          id: DateTime.now() as String,
+          id: DateTime.now().toString(),
           amount: total,
           products: cartProducts,
           dateTime: DateTime.now()),
