@@ -6,7 +6,7 @@ import '../providers/cart.dart';
 class CartItem extends StatelessWidget {
   CartItem(
       {required this.quantity,
-        required this.productID,
+      required this.productID,
       required this.price,
       required this.id,
       required this.title});
@@ -20,14 +20,24 @@ class CartItem extends StatelessWidget {
     return Dismissible(
       key: ValueKey(id),
       direction: DismissDirection.endToStart,
-      onDismissed: (direction){
+      onDismissed: (direction) {
         Provider.of<Cart>(context, listen: false).removeItem(productID);
       },
+      confirmDismiss: (direction) => showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: const Text('Are you sure?'),
+                content: const Text('Do you want to remove the item from the cart?'),
+            actions: [
+              TextButton(onPressed: (){Navigator.of(context).pop(false);}, child: const Text('No')),
+              TextButton(onPressed: (){Navigator.of(context).pop(true);}, child: const Text('Yes'))
+            ],
+              )),
       background: Container(
         color: Colors.red,
         alignment: Alignment.centerRight,
-        child:  const Padding(
-          padding:  EdgeInsets.only(right: 20),
+        child: const Padding(
+          padding: EdgeInsets.only(right: 20),
           child: Icon(
             Icons.delete,
             color: Colors.white,
