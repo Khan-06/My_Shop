@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
-import 'package:another_flushbar/flushbar.dart';
 
 import '../providers/product.dart';
 import '../providers/cart.dart';
 import '../screens/product_details_screen.dart';
+import './pop_up_bottomBar.dart';
 
 class ProductItem extends StatelessWidget {
   @override
@@ -36,20 +36,16 @@ class ProductItem extends StatelessWidget {
             color: Theme.of(context).colorScheme.secondary,
             onPressed: () {
               cart.addItem(product.id, product.title, product.price);
-              Flushbar(
+              PopUpBar(
                 title: 'Product Added',
-                icon: Icon(Icons.check_circle, color: Theme.of(context).colorScheme.primary),
                 message: '${product.title} added to your cart',
-                duration: const Duration(seconds: 2),
-                margin: const EdgeInsets.all(5),
-                borderRadius: BorderRadius.circular(20),
-                mainButton: ElevatedButton(
-                  onPressed: () {
-                    cart.removeSingleItem(product.id);
-                  },
+                ctx: context,
+                icon: Icon(Icons.check_circle, color: Theme.of(context).colorScheme.primary),
+                button: ElevatedButton(
+                  onPressed: () => cart.removeSingleItem(product.id),
                   child: const Text('Undo'),
                 ),
-              ).show(context);
+              );
             },
             icon: const Icon(Icons.shopping_cart), //Shopping cart
           ),
@@ -65,3 +61,19 @@ class ProductItem extends StatelessWidget {
     );
   }
 }
+
+//
+// Flushbar(
+// title: 'Product Added',
+// icon: Icon(Icons.check_circle, color: Theme.of(context).colorScheme.primary),
+// message: '${product.title} added to your cart',
+// duration: const Duration(seconds: 2),
+// margin: const EdgeInsets.all(5),
+// borderRadius: BorderRadius.circular(20),
+// mainButton: ElevatedButton(
+// onPressed: () {
+// cart.removeSingleItem(product.id);
+// },
+// child: const Text('Undo'),
+// // ),
+// ).show(context);
