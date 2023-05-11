@@ -22,7 +22,6 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Title'),
                  textInputAction: TextInputAction.next,
-
               )
             ],
           ),
