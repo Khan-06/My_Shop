@@ -12,17 +12,36 @@ class EditProductsScreen extends StatefulWidget {
 class _EditProductsScreenState extends State<EditProductsScreen> {
   final _priceFocusNode = FocusNode();
   final _descriptionNode = FocusNode();
+  final _imageUrlFocusNode = FocusNode();
+  final _imageUrlController = TextEditingController();
+  
+  @override
+  void initState() {
+_imageUrlFocusNode.addListener(_updateImageUrl);
+    super.initState();
+  }
 
   @override
   void dispose() {
+    _imageUrlFocusNode.removeListener(_updateImageUrl);
     _priceFocusNode.dispose();
     _descriptionNode.dispose();
+    _imageUrlController.dispose();
     super.dispose();
   }
+
+  void _updateImageUrl (){
+    if (!_imageUrlFocusNode.hasFocus){
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      appBar: AppBar(title: const Text('Edit Products'),),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Edit Products'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -30,7 +49,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
             children: [
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Title'),
-                 textInputAction: TextInputAction.next,
+                textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) => _priceFocusNode,
               ),
               TextFormField(
@@ -46,6 +65,33 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                 focusNode: _descriptionNode,
                 keyboardType: TextInputType.multiline,
               ),
+              Row(
+                children: [
+                  Container(
+                    width: 100,
+                    height: 100,
+                    margin: const EdgeInsets.only(top: 15, right: 10),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 1, color: Colors.grey),
+                    ),
+                    child: _imageUrlController.text.isEmpty
+                        ? const Center(child: Text('Enter URL'))
+                        : FittedBox(
+                            fit: BoxFit.fill,
+                            child: Image.network(_imageUrlController.text),),
+                  ),
+                  Expanded(
+                    child: TextFormField(
+                      decoration: const InputDecoration(labelText: 'Image Url'),
+                      keyboardType: TextInputType.url,
+                      textInputAction: TextInputAction.done,
+                      controller: _imageUrlController,
+                      onEditingComplete: () => setState(() {}),
+                      focusNode: _imageUrlFocusNode,
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
         ),
