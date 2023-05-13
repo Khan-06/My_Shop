@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../providers/product.dart';
 
 class EditProductsScreen extends StatefulWidget {
   const EditProductsScreen({Key? key}) : super(key: key);
@@ -14,10 +15,13 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
   final _descriptionNode = FocusNode();
   final _imageUrlFocusNode = FocusNode();
   final _imageUrlController = TextEditingController();
-  
+  final _form = GlobalKey<FormState>();
+  var _editedProduct =
+      Product(id: '', description: '', title: '', imageUrl: '', price: 0);
+
   @override
   void initState() {
-_imageUrlFocusNode.addListener(_updateImageUrl);
+    _imageUrlFocusNode.addListener(_updateImageUrl);
     super.initState();
   }
 
@@ -30,10 +34,18 @@ _imageUrlFocusNode.addListener(_updateImageUrl);
     super.dispose();
   }
 
-  void _updateImageUrl (){
-    if (!_imageUrlFocusNode.hasFocus){
+  void _updateImageUrl() {
+    if (!_imageUrlFocusNode.hasFocus) {
       setState(() {});
     }
+  }
+
+  void _saveForm() {
+    _form.currentState?.save();
+    print(_editedProduct.imageUrl);
+    print(_editedProduct.title);
+    print(_editedProduct.description);
+    print(_editedProduct.price);
   }
 
   @override
@@ -41,29 +53,54 @@ _imageUrlFocusNode.addListener(_updateImageUrl);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Products'),
+        actions: [
+          IconButton(
+            onPressed: _saveForm,
+            icon: const Icon(Icons.save),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
+          key: _form,
           child: ListView(
             children: [
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Title'),
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) => _priceFocusNode,
+                onSaved: (newValue) => _editedProduct = Product(
+                    id: _editedProduct.id,
+                    description: _editedProduct.description,
+                    title: newValue!,
+                    imageUrl: _editedProduct.imageUrl,
+                    price: _editedProduct.price),
               ),
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Price'),
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.number,
-                focusNode: _priceFocusNode,
-                onFieldSubmitted: (value) => _descriptionNode,
-              ),
+                  decoration: const InputDecoration(labelText: 'Price'),
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.number,
+                  focusNode: _priceFocusNode,
+                  onFieldSubmitted: (value) => _descriptionNode,
+                  onSaved: (newValue) => _editedProduct = Product(
+                        id: _editedProduct.id,
+                        description: _editedProduct.description,
+                        title: _editedProduct.title,
+                        imageUrl: _editedProduct.imageUrl,
+                        price: double.parse(newValue!),
+                      ),),
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Description'),
                 maxLines: 3,
                 focusNode: _descriptionNode,
                 keyboardType: TextInputType.multiline,
+                  onSaved: (newValue) => _editedProduct = Product(
+                      id: _editedProduct.id,
+                      description: newValue!,
+                      title: _editedProduct.title,
+                      imageUrl: _editedProduct.imageUrl,
+                      price: _editedProduct.price)
               ),
               Row(
                 children: [
@@ -78,7 +115,8 @@ _imageUrlFocusNode.addListener(_updateImageUrl);
                         ? const Center(child: Text('Enter URL'))
                         : FittedBox(
                             fit: BoxFit.fill,
-                            child: Image.network(_imageUrlController.text),),
+                            child: Image.network(_imageUrlController.text),
+                          ),
                   ),
                   Expanded(
                     child: TextFormField(
@@ -88,6 +126,14 @@ _imageUrlFocusNode.addListener(_updateImageUrl);
                       controller: _imageUrlController,
                       onEditingComplete: () => setState(() {}),
                       focusNode: _imageUrlFocusNode,
+                      onFieldSubmitted: (_) => _saveForm(),
+                        onSaved: (newValue) => _editedProduct = Product(
+                            id: _editedProduct.id,
+                            description: _editedProduct.description,
+                            title: _editedProduct.title,
+                            imageUrl: newValue!,
+                            price: _editedProduct.price)
+
                     ),
                   ),
                 ],
