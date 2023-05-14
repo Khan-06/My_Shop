@@ -42,8 +42,8 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
 
   void _saveForm() {
     final isValid = _form.currentState?.validate();
-    if (!isValid!){
-      return ;
+    if (!isValid!) {
+      return;
     }
     _form.currentState?.save();
     print(_editedProduct.imageUrl);
@@ -81,37 +81,58 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                     imageUrl: _editedProduct.imageUrl,
                     price: _editedProduct.price),
                 validator: (value) {
-                  if(value!.isEmpty){
+                  if (value!.isEmpty) {
                     return 'Please provide a value.';
                   }
                   return null;
                 },
               ),
               TextFormField(
-                  decoration: const InputDecoration(labelText: 'Price'),
-                  textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.number,
-                  focusNode: _priceFocusNode,
-                  onFieldSubmitted: (value) => _descriptionNode,
-                  onSaved: (newValue) => _editedProduct = Product(
-                        id: _editedProduct.id,
-                        description: _editedProduct.description,
-                        title: _editedProduct.title,
-                        imageUrl: _editedProduct.imageUrl,
-                        price: double.parse(newValue!),
-                      ),),
+                decoration: const InputDecoration(labelText: 'Price'),
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.number,
+                focusNode: _priceFocusNode,
+                onFieldSubmitted: (value) => _descriptionNode,
+                onSaved: (newValue) => _editedProduct = Product(
+                  id: _editedProduct.id,
+                  description: _editedProduct.description,
+                  title: _editedProduct.title,
+                  imageUrl: _editedProduct.imageUrl,
+                  price: double.parse(newValue!),
+                ),
+                validator: (value) {
+                  if(value!.isEmpty){
+                    return 'Please enter a price.';
+                  }
+                  if(double.tryParse(value) == null) {
+                    return 'Please enter a valid amount.';
+                  }
+                  if(double.parse(value) <= 0){
+                    return 'Please enter the price greater than zero';
+                  }
+                  return null;
+                },
+              ),
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Description'),
-                maxLines: 3,
-                focusNode: _descriptionNode,
-                keyboardType: TextInputType.multiline,
+                  decoration: const InputDecoration(labelText: 'Description'),
+                  maxLines: 3,
+                  focusNode: _descriptionNode,
+                  keyboardType: TextInputType.multiline,
                   onSaved: (newValue) => _editedProduct = Product(
                       id: _editedProduct.id,
                       description: newValue!,
                       title: _editedProduct.title,
                       imageUrl: _editedProduct.imageUrl,
-                      price: _editedProduct.price)
-              ),
+                      price: _editedProduct.price),
+              validator: (value) {
+                    if(value!.isEmpty){
+                      return 'Please enter the description.';
+                    }
+                    if(value.length < 10){
+                      return 'The description should be at least 10 characters long.';
+                    }
+                    return null;
+              }),
               Row(
                 children: [
                   Container(
@@ -130,21 +151,20 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                   ),
                   Expanded(
                     child: TextFormField(
-                      decoration: const InputDecoration(labelText: 'Image Url'),
-                      keyboardType: TextInputType.url,
-                      textInputAction: TextInputAction.done,
-                      controller: _imageUrlController,
-                      onEditingComplete: () => setState(() {}),
-                      focusNode: _imageUrlFocusNode,
-                      onFieldSubmitted: (_) => _saveForm(),
+                        decoration:
+                            const InputDecoration(labelText: 'Image Url'),
+                        keyboardType: TextInputType.url,
+                        textInputAction: TextInputAction.done,
+                        controller: _imageUrlController,
+                        onEditingComplete: () => setState(() {}),
+                        focusNode: _imageUrlFocusNode,
+                        onFieldSubmitted: (_) => _saveForm(),
                         onSaved: (newValue) => _editedProduct = Product(
                             id: _editedProduct.id,
                             description: _editedProduct.description,
                             title: _editedProduct.title,
                             imageUrl: newValue!,
-                            price: _editedProduct.price)
-
-                    ),
+                            price: _editedProduct.price)),
                   ),
                 ],
               )
