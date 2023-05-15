@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import '../providers/product.dart';
+import '../providers/product_provider.dart';
 
 class EditProductsScreen extends StatefulWidget {
   const EditProductsScreen({Key? key}) : super(key: key);
@@ -46,10 +49,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
       return;
     }
     _form.currentState?.save();
-    print(_editedProduct.imageUrl);
-    print(_editedProduct.title);
-    print(_editedProduct.description);
-    print(_editedProduct.price);
+    Provider.of<ProductsProvider>(context, listen: false).addProducts(_editedProduct);
   }
 
   @override
@@ -101,13 +101,13 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                   price: double.parse(newValue!),
                 ),
                 validator: (value) {
-                  if(value!.isEmpty){
+                  if (value!.isEmpty) {
                     return 'Please enter a price.';
                   }
-                  if(double.tryParse(value) == null) {
+                  if (double.tryParse(value) == null) {
                     return 'Please enter a valid amount.';
                   }
-                  if(double.parse(value) <= 0){
+                  if (double.parse(value) <= 0) {
                     return 'Please enter the price greater than zero';
                   }
                   return null;
@@ -124,15 +124,15 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                       title: _editedProduct.title,
                       imageUrl: _editedProduct.imageUrl,
                       price: _editedProduct.price),
-              validator: (value) {
-                    if(value!.isEmpty){
+                  validator: (value) {
+                    if (value!.isEmpty) {
                       return 'Please enter the description.';
                     }
-                    if(value.length < 10){
+                    if (value.length < 10) {
                       return 'The description should be at least 10 characters long.';
                     }
                     return null;
-              }),
+                  }),
               Row(
                 children: [
                   Container(
