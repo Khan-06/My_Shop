@@ -39,6 +39,13 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
 
   void _updateImageUrl() {
     if (!_imageUrlFocusNode.hasFocus) {
+      if ((!_imageUrlController.text.startsWith('http') &&
+              !_imageUrlController.text.startsWith('https')) ||
+          (!_imageUrlController.text.endsWith('.png') &&
+              !_imageUrlController.text.endsWith('.jpg') &&
+              !_imageUrlController.text.endsWith('.jpeg'))) {
+        return;
+      }
       setState(() {});
     }
   }
@@ -151,20 +158,35 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                   ),
                   Expanded(
                     child: TextFormField(
-                        decoration:
-                            const InputDecoration(labelText: 'Image Url'),
-                        keyboardType: TextInputType.url,
-                        textInputAction: TextInputAction.done,
-                        controller: _imageUrlController,
-                        onEditingComplete: () => setState(() {}),
-                        focusNode: _imageUrlFocusNode,
-                        onFieldSubmitted: (_) => _saveForm(),
-                        onSaved: (newValue) => _editedProduct = Product(
-                            id: _editedProduct.id,
-                            description: _editedProduct.description,
-                            title: _editedProduct.title,
-                            imageUrl: newValue!,
-                            price: _editedProduct.price)),
+                      decoration: const InputDecoration(labelText: 'Image Url'),
+                      keyboardType: TextInputType.url,
+                      textInputAction: TextInputAction.done,
+                      controller: _imageUrlController,
+                      onEditingComplete: () => setState(() {}),
+                      focusNode: _imageUrlFocusNode,
+                      onFieldSubmitted: (_) => _saveForm(),
+                      onSaved: (newValue) => _editedProduct = Product(
+                          id: _editedProduct.id,
+                          description: _editedProduct.description,
+                          title: _editedProduct.title,
+                          imageUrl: newValue!,
+                          price: _editedProduct.price),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter a image Url.';
+                        }
+                        if (!value.startsWith('http') &&
+                            !value.startsWith('https')) {
+                          return 'Please enter a valid Url.';
+                        }
+                        if (!value.endsWith('.png') &&
+                            !value.endsWith('.jpg') &&
+                            !value.endsWith('.jpeg')) {
+                          return 'Please enter a valid Url';
+                        }
+                        return null;
+                      },
+                    ),
                   ),
                 ],
               )
