@@ -57,6 +57,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
     }
     _form.currentState?.save();
     Provider.of<ProductsProvider>(context, listen: false).addProducts(_editedProduct);
+    Navigator.pop(context);
   }
 
   @override
