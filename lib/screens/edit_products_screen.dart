@@ -20,12 +20,40 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
   final _imageUrlController = TextEditingController();
   final _form = GlobalKey<FormState>();
   var _editedProduct =
-      Product(id: '', description: '', title: '', imageUrl: '', price: 0);
+      Product(id: '', description: '', title: '', imageUrl: '', price: 0.1);
+
+  var _initValues = {
+    'title': '',
+    'description': '',
+    'price': '',
+    'imageUrl': '',
+  };
+  bool _isInit = true;
 
   @override
   void initState() {
     _imageUrlFocusNode.addListener(_updateImageUrl);
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit){
+      final productId = ModalRoute.of(context)?.settings.arguments as String;
+      if(productId != null){
+        _editedProduct = Provider.of<ProductsProvider>(context, listen: false).findById(productId);
+        _initValues = {
+          'title': _editedProduct.title,
+          'description': _editedProduct.description,
+          'price': _editedProduct.price.toString(),
+          //'imageUrl': _editedProduct.imageUrl,
+          'imageUrl': '',
+        };
+        _imageUrlController.text = _editedProduct.imageUrl;
+      }
+    }
+    _isInit = false;
+    super.didChangeDependencies();
   }
 
   @override
@@ -52,11 +80,15 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
 
   void _saveForm() {
     final isValid = _form.currentState?.validate();
-    if (!isValid!) {
-      return;
-    }
+    if (!isValid!) {return;}
     _form.currentState?.save();
-    Provider.of<ProductsProvider>(context, listen: false).addProducts(_editedProduct);
+    if(_editedProduct.id.isNotEmpty){
+      Provider.of<ProductsProvider>(context, listen: false).updateProduct(_editedProduct.id,_editedProduct);
+    }
+    else {
+      Provider.of<ProductsProvider>(context, listen: false).addProducts(_editedProduct);
+    }
+
     Navigator.pop(context);
   }
 
@@ -79,6 +111,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
           child: ListView(
             children: [
               TextFormField(
+                initialValue: _initValues['title'],
                 decoration: const InputDecoration(labelText: 'Title'),
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) => _priceFocusNode,
@@ -87,15 +120,18 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                     description: _editedProduct.description,
                     title: newValue!,
                     imageUrl: _editedProduct.imageUrl,
-                    price: _editedProduct.price),
+                    isFavorite: _editedProduct.isFavorite,
+                    price: _editedProduct.price,
+                ),
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please provide a value.';
                   }
                   return null;
                 },
-              ),
+              ), // Title
               TextFormField(
+                initialValue: _initValues['price'],
                 decoration: const InputDecoration(labelText: 'Price'),
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.number,
@@ -106,6 +142,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                   description: _editedProduct.description,
                   title: _editedProduct.title,
                   imageUrl: _editedProduct.imageUrl,
+                  isFavorite: _editedProduct.isFavorite,
                   price: double.parse(newValue!),
                 ),
                 validator: (value) {
@@ -120,8 +157,9 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                   }
                   return null;
                 },
-              ),
+              ), // Price
               TextFormField(
+                initialValue: _initValues['description'],
                   decoration: const InputDecoration(labelText: 'Description'),
                   maxLines: 3,
                   focusNode: _descriptionNode,
@@ -129,6 +167,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                   onSaved: (newValue) => _editedProduct = Product(
                       id: _editedProduct.id,
                       description: newValue!,
+                      isFavorite: _editedProduct.isFavorite,
                       title: _editedProduct.title,
                       imageUrl: _editedProduct.imageUrl,
                       price: _editedProduct.price),
@@ -140,7 +179,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                       return 'The description should be at least 10 characters long.';
                     }
                     return null;
-                  }),
+                  }), // Description
               Row(
                 children: [
                   Container(
@@ -159,6 +198,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                   ),
                   Expanded(
                     child: TextFormField(
+                     // initialValue: _initValues['imageUrl'],
                       decoration: const InputDecoration(labelText: 'Image Url'),
                       keyboardType: TextInputType.url,
                       textInputAction: TextInputAction.done,
@@ -171,6 +211,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                           description: _editedProduct.description,
                           title: _editedProduct.title,
                           imageUrl: newValue!,
+                          isFavorite: _editedProduct.isFavorite,
                           price: _editedProduct.price),
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -190,7 +231,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                     ),
                   ),
                 ],
-              )
+              ) // Image
             ],
           ),
         ),
