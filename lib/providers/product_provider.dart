@@ -88,6 +88,9 @@ class ProductsProvider with ChangeNotifier {
     else {
       print('no ID');
     }//check here if something goes wrong!
-
+  }
+  void deleteProduct(String id){
+    _items.removeWhere((element) => element.id == id);
+    notifyListeners();
   }
 }
