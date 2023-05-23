@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/product.dart';
-import '../providers/product_provider.dart';
+import '../providers/products.dart';
 
 class EditProductsScreen extends StatefulWidget {
   const EditProductsScreen({Key? key}) : super(key: key);

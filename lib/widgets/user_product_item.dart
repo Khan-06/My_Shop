@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/product_provider.dart';
+import '../providers/products.dart';
 import '../screens/edit_products_screen.dart';
 
 class UserProductItem extends StatelessWidget {

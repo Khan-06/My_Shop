@@ -6,7 +6,7 @@ import './screens/product_details_screen.dart';
 import './screens/cart_screen.dart';
 import './providers/cart.dart';
 import './screens/products_overview_screen.dart';
-import './providers/product_provider.dart';
+import './providers/products.dart';
 import './providers/orders.dart';
 import './screens/orders_screen.dart';
 import './screens/user_product_screen.dart';

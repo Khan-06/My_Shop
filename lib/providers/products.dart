@@ -61,14 +61,16 @@ class ProductsProvider with ChangeNotifier {
   }
 
   void addProducts(Product product) {
-     var url = Uri.https('https://my-shop-a4071-default-rtdb.firebaseio.com', '/products.json');
-     http.post(url, body: json.encode({
-       'title': product.title,
-       'description': product.description,
-       'imageUrl': product.imageUrl,
-       'price': product.price,
-       'isFavorite': product.isFavorite,
-     }));
+    var url = Uri.https(
+        'my-shop-a4071-default-rtdb.firebaseio.com', '/products.json');
+    http.post(url,
+        body: json.encode({
+          'title': product.title,
+          'description': product.description,
+          'imageUrl': product.imageUrl,
+          'price': product.price,
+          'isFavorite': product.isFavorite,
+        }));
     final newProduct = Product(
         id: DateTime.now().toString(),
         description: product.description,
@@ -91,15 +93,15 @@ class ProductsProvider with ChangeNotifier {
 
   void updateProduct(String id, Product newProduct) {
     final prodIndex = _items.indexWhere((element) => element.id == id);
-    if(prodIndex >= 0){
+    if (prodIndex >= 0) {
       _items[prodIndex] = newProduct;
       notifyListeners();
-    }
-    else {
+    } else {
       print('no ID');
-    }//check here if something goes wrong!
+    } //check here if something goes wrong!
   }
-  void deleteProduct(String id){
+
+  void deleteProduct(String id) {
     _items.removeWhere((element) => element.id == id);
     notifyListeners();
   }
