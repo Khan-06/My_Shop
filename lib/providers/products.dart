@@ -63,22 +63,26 @@ class ProductsProvider with ChangeNotifier {
   void addProducts(Product product) {
     var url = Uri.https(
         'my-shop-a4071-default-rtdb.firebaseio.com', '/products.json');
-    http.post(url,
-        body: json.encode({
-          'title': product.title,
-          'description': product.description,
-          'imageUrl': product.imageUrl,
-          'price': product.price,
-          'isFavorite': product.isFavorite,
-        }));
-    final newProduct = Product(
-        id: DateTime.now().toString(),
-        description: product.description,
-        title: product.title,
-        imageUrl: product.imageUrl,
-        price: product.price);
-    _items.insert(0, newProduct);
-    notifyListeners();
+    http
+        .post(url,
+            body: json.encode({
+              'title': product.title,
+              'description': product.description,
+              'imageUrl': product.imageUrl,
+              'price': product.price,
+              'isFavorite': product.isFavorite,
+            }))
+        .then((response) {
+          print(json.decode(response.body));
+      final newProduct = Product(
+          id:json.decode(response.body)['name'],
+          description: product.description,
+          title: product.title,
+          imageUrl: product.imageUrl,
+          price: product.price);
+      _items.insert(0, newProduct);
+      notifyListeners();
+    });
   }
 
   void showFavoriteOnly() {
