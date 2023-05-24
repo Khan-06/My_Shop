@@ -60,10 +60,10 @@ class ProductsProvider with ChangeNotifier {
     return items.firstWhere((element) => element.id == Id);
   }
 
-  void addProducts(Product product) {
+  Future<void> addProducts(Product product) {
     var url = Uri.https(
         'my-shop-a4071-default-rtdb.firebaseio.com', '/products.json');
-    http
+    return http
         .post(url,
             body: json.encode({
               'title': product.title,
@@ -102,7 +102,7 @@ class ProductsProvider with ChangeNotifier {
       notifyListeners();
     } else {
       print('no ID');
-    } //check here if something goes wrong!
+    }
   }
 
   void deleteProduct(String id) {

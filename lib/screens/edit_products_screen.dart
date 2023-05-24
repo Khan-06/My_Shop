@@ -22,13 +22,16 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
   var _editedProduct =
       Product(id: '', description: '', title: '', imageUrl: '', price: 0.1);
 
-  var _initValues = {   //Initial Values!
+  var _initValues = {
+    //Initial Values!
     'title': '',
     'description': '',
     'price': '',
     'imageUrl': '',
   };
+
   bool _isInit = true;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -38,10 +41,11 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
 
   @override
   void didChangeDependencies() {
-    if (_isInit){
+    if (_isInit) {
       final productId = ModalRoute.of(context)?.settings.arguments;
-      if(productId != null){
-        _editedProduct = Provider.of<ProductsProvider>(context, listen: false).findById(productId as String);
+      if (productId != null) {
+        _editedProduct = Provider.of<ProductsProvider>(context, listen: false)
+            .findById(productId as String);
         _initValues = {
           'title': _editedProduct.title,
           'description': _editedProduct.description,
@@ -80,16 +84,30 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
 
   void _saveForm() {
     final isValid = _form.currentState?.validate();
-    if (!isValid!) {return;}
+    if (!isValid!) {
+      return;
+    }
     _form.currentState?.save();
-    if(_editedProduct.id.isNotEmpty){
-      Provider.of<ProductsProvider>(context, listen: false).updateProduct(_editedProduct.id,_editedProduct);
+    setState(() {
+      _isLoading = true;
+    });
+    if (_editedProduct.id.isNotEmpty) {
+      Provider.of<ProductsProvider>(context, listen: false)
+          .updateProduct(_editedProduct.id, _editedProduct);
+      Navigator.pop(context);
+      setState(() {
+        _isLoading = false;
+      });
+    } else {
+      Provider.of<ProductsProvider>(context, listen: false)
+          .addProducts(_editedProduct)
+          .then((value) {
+        setState(() {
+          _isLoading = false;
+        });
+        Navigator.pop(context);
+      });
     }
-    else {
-      Provider.of<ProductsProvider>(context, listen: false).addProducts(_editedProduct);
-    }
-
-    Navigator.pop(context);
   }
 
   @override
@@ -104,7 +122,11 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
           ),
         ],
       ),
-      body: Padding(
+      body: _isLoading ? Center(
+        child: CircularProgressIndicator(
+
+        ),
+      ):Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _form,
@@ -116,12 +138,12 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) => _priceFocusNode,
                 onSaved: (newValue) => _editedProduct = Product(
-                    id: _editedProduct.id,
-                    description: _editedProduct.description,
-                    title: newValue!,
-                    imageUrl: _editedProduct.imageUrl,
-                    isFavorite: _editedProduct.isFavorite,
-                    price: _editedProduct.price,
+                  id: _editedProduct.id,
+                  description: _editedProduct.description,
+                  title: newValue!,
+                  imageUrl: _editedProduct.imageUrl,
+                  isFavorite: _editedProduct.isFavorite,
+                  price: _editedProduct.price,
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -159,7 +181,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                 },
               ), // Price
               TextFormField(
-                initialValue: _initValues['description'],
+                  initialValue: _initValues['description'],
                   decoration: const InputDecoration(labelText: 'Description'),
                   maxLines: 3,
                   focusNode: _descriptionNode,
@@ -198,7 +220,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                   ),
                   Expanded(
                     child: TextFormField(
-                     // initialValue: _initValues['imageUrl'],
+                      // initialValue: _initValues['imageUrl'],
                       decoration: const InputDecoration(labelText: 'Image Url'),
                       keyboardType: TextInputType.url,
                       textInputAction: TextInputAction.done,
