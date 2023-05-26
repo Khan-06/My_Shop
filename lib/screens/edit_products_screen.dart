@@ -44,7 +44,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
     if (_isInit) {
       final productId = ModalRoute.of(context)?.settings.arguments;
       if (productId != null) {
-        _editedProduct = Provider.of<ProductsProvider>(context, listen: false)
+        _editedProduct = Provider.of<Products>(context, listen: false)
             .findById(productId as String);
         _initValues = {
           'title': _editedProduct.title,
@@ -92,7 +92,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
       _isLoading = true;
     });
     if (_editedProduct.id.isNotEmpty) {
-      Provider.of<ProductsProvider>(context, listen: false)
+      Provider.of<Products>(context, listen: false)
           .updateProduct(_editedProduct.id, _editedProduct);
       Navigator.pop(context);
       setState(() {
@@ -100,7 +100,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
       });
     } else {
       try {
-        await Provider.of<ProductsProvider>(context, listen: false)
+        await Provider.of<Products>(context, listen: false)
             .addProducts(_editedProduct);
       } catch (error) {
         await showDialog<void>(
@@ -280,3 +280,6 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
     );
   }
 }
+
+
+//https://cdn.pixabay.com/photo/2023/04/23/09/40/bird-7945398_1280.jpg

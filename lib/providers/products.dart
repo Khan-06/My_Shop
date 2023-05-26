@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 import 'product.dart';
 
-class ProductsProvider with ChangeNotifier {
+class Products with ChangeNotifier {
   List<Product> _items = [
     Product(
       id: 'p1',
@@ -58,6 +58,16 @@ class ProductsProvider with ChangeNotifier {
 
   Product findById(String Id) {
     return items.firstWhere((element) => element.id == Id);
+  }
+
+  Future<void> fetchAndSetProducts () async {
+    final url = Uri.parse('https://my-shop-a4071-default-rtdb.firebaseio.com/products.json');  //check for errors
+    try {
+      final response = await http.get(url);
+      print(response);
+    } catch(error){
+      throw(error);
+    }
   }
 
   Future<void> addProducts(Product product) async {
