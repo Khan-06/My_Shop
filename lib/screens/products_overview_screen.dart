@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
 import '../screens/cart_screen.dart';
 import '../providers/cart.dart';
 import '../providers/products.dart';
@@ -22,8 +21,10 @@ class ProductOverViewScreen extends StatefulWidget {
 }
 
 class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
-  var _showOnlyFavorites = false;
+  bool _showOnlyFavorites = false;
   bool _isInit = true;
+  bool _isLoading = false;
+
   @override
   void initState() {
     // Provider.of<Products>(context).fetchAndSetProducts();  Not Working
@@ -32,7 +33,16 @@ class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
 
   @override
   void didChangeDependencies() {
-    if(_isInit){Provider.of<Products>(context).fetchAndSetProducts();}
+    setState(() {
+      _isLoading = true;
+    });
+    if (_isInit) {
+      Provider.of<Products>(context).fetchAndSetProducts().then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
     _isInit = false;
     super.didChangeDependencies();
   }
@@ -69,18 +79,20 @@ class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
               }),
           Consumer<Cart>(
             builder: (_, cartData, ch) => MyBadge(
-                value: cartData.itemCount.toString(),                   //Check this if error comes..
+                value:
+                    cartData.itemCount.toString(), //Check this if error comes..
                 child: ch as Widget),
-                child: IconButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, CartScreen.routeName);
-                    }, icon: const Icon(Icons.shopping_cart),),
-
+            child: IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, CartScreen.routeName);
+              },
+              icon: const Icon(Icons.shopping_cart),
+            ),
           )
         ],
       ),
       drawer: const AppDrawer(),
-      body: ProductsGrid(_showOnlyFavorites),
+      body: _isLoading ? const Center(child: CircularProgressIndicator(),) :ProductsGrid(_showOnlyFavorites),
     );
   }
 }
