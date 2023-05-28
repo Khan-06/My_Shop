@@ -21,6 +21,7 @@ class ProductOverViewScreen extends StatefulWidget {
 }
 
 class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
+
   bool _showOnlyFavorites = false;
   bool _isInit = true;
   bool _isLoading = false;
@@ -33,10 +34,10 @@ class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
 
   @override
   void didChangeDependencies() {
-    setState(() {
-      _isLoading = true;
-    });
     if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
       Provider.of<Products>(context).fetchAndSetProducts().then((_) {
         setState(() {
           _isLoading = false;
@@ -92,7 +93,7 @@ class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
         ],
       ),
       drawer: const AppDrawer(),
-      body: _isLoading ? const Center(child: CircularProgressIndicator(),) :ProductsGrid(_showOnlyFavorites),
+      body: _isLoading ? const Center(child: CircularProgressIndicator()) :ProductsGrid(_showOnlyFavorites),
     );
   }
 }

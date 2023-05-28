@@ -60,19 +60,26 @@ class Products with ChangeNotifier {
     return items.firstWhere((element) => element.id == Id);
   }
 
-  Future<void> fetchAndSetProducts () async {
-    final url = Uri.parse('https://my-shop-a4071-default-rtdb.firebaseio.com/products.json');  //check for errors
+  Future<void> fetchAndSetProducts() async {
+    final url = Uri.parse(
+        'https://my-shop-a4071-default-rtdb.firebaseio.com/products.json'); //check for errors
     try {
       final response = await http.get(url);
       print(json.decode(response.body));
       final List<Product> loadedProducts = [];
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       extractedData.forEach((prodId, prodData) {
-        loadedProducts.add(Product(id: prodId, description: prodData['description'], title: prodData['title'], imageUrl: prodData['imageUrl'], price: prodData['price'], isFavorite: prodData['isFavorite']));
+        loadedProducts.add(Product(
+            id: prodId,
+            description: prodData['description'],
+            title: prodData['title'],
+            imageUrl: prodData['imageUrl'],
+            price: prodData['price'],
+            isFavorite: prodData['isFavorite']));
       });
       _items = loadedProducts;
       notifyListeners();
-    } catch(error){
+    } catch (error) {
       rethrow;
     }
   }
