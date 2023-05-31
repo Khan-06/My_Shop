@@ -32,7 +32,6 @@ class UserProductScreen extends StatelessWidget {
       ),
       drawer: const AppDrawer(),
       body: RefreshIndicator(
-        key: GlobalKey(),
         onRefresh: () => _refreshPage(context),
         child: Padding(
           padding: const EdgeInsets.all(8),
