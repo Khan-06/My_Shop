@@ -92,12 +92,8 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
       _isLoading = true;
     });
     if (_editedProduct.id.isNotEmpty) {
-      Provider.of<Products>(context, listen: false)
+      await Provider.of<Products>(context, listen: false)
           .updateProduct(_editedProduct.id, _editedProduct);
-      Navigator.pop(context);
-      setState(() {
-        _isLoading = false;
-      });
     } else {
       try {
         await Provider.of<Products>(context, listen: false)
@@ -117,7 +113,8 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
             ],
           ),
         );
-      } finally {
+      }
+      {
         setState(() {
           _isLoading = false;
         });
@@ -280,6 +277,5 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
     );
   }
 }
-
 
 //https://cdn.pixabay.com/photo/2023/04/23/09/40/bird-7945398_1280.jpg
