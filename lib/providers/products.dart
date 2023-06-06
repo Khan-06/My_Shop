@@ -129,13 +129,15 @@ class Products with ChangeNotifier {
     final prodIndex = _items.indexWhere((element) => element.id == id);
     if (prodIndex >= 0) {
       _items[prodIndex] = newProduct;
-      final url = Uri.parse('https://my-shop-a4071-default-rtdb.firebaseio.com/products/$id.json');
-      await http.patch(url, body: json.encode({
-        'title': newProduct.title,
-        'description': newProduct.description,
-        'price': newProduct.price,
-        'imageUrl': newProduct.imageUrl
-      }));
+      final url = Uri.parse(
+          'https://my-shop-a4071-default-rtdb.firebaseio.com/products/$id.json');
+      await http.patch(url,
+          body: json.encode({
+            'title': newProduct.title,
+            'description': newProduct.description,
+            'price': newProduct.price,
+            'imageUrl': newProduct.imageUrl
+          }));
       notifyListeners();
     } else {
       print('no ID');
@@ -143,7 +145,22 @@ class Products with ChangeNotifier {
   }
 
   void deleteProduct(String id) {
+    final url = Uri.parse(
+        'https://my-shop-a4071-default-rtdb.firebaseio.com/products/$id.json');
+    final existingProductIndex =
+        _items.indexWhere((element) => element.id == id);
+    Product? existingProduct = _items[existingProductIndex];
     _items.removeWhere((element) => element.id == id);
+    http.delete(url).then((response) {
+      if (response.statusCode >= 400){
+        // We will add something later
+      }
+      existingProduct = null;
+    }).catchError((_) {
+      _items.insert(existingProductIndex, existingProduct!);
+    });
+    notifyListeners();
+    _items.removeAt(existingProductIndex);
     notifyListeners();
   }
 }
