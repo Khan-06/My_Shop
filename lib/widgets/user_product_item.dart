@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/products.dart';
 import '../screens/edit_products_screen.dart';
+import './pop_up_bottomBar.dart';
 
 class UserProductItem extends StatelessWidget {
   const UserProductItem({super.key, required this.id,required this.title, required this.imageUrl});
@@ -30,8 +31,13 @@ class UserProductItem extends StatelessWidget {
                 icon:  Icon(Icons.edit, color: Theme.of(context).colorScheme.primary,),
               ),
               IconButton(
-                onPressed: () {
-                  Provider.of<Products>(context, listen: false).deleteProduct(id);
+                onPressed: () async {
+                  try{
+                   await Provider.of<Products>(context, listen: false).deleteProduct(id);
+                  }
+                  catch (error) {
+                   PopUpBar(title: "Deleting Failed", message: 'Request failed due to some reason', ctx: context);
+                  }
                 },
                 icon: const Icon(Icons.delete, color: Colors.red),
               )
