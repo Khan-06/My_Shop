@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import 'product.dart';
+import '../models/http_exception.dart';
 
 class Products with ChangeNotifier {
   List<Product> _items = [
@@ -153,7 +154,7 @@ class Products with ChangeNotifier {
     _items.removeWhere((element) => element.id == id);
     http.delete(url).then((response) {
       if (response.statusCode >= 400){
-        // We will add something later
+        throw Exception();
       }
       existingProduct = null;
     }).catchError((_) {
