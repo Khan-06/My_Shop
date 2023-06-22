@@ -145,8 +145,8 @@ class Products with ChangeNotifier {
   }
 
   Future<void> deleteProduct(String id) async {
-    final url = Uri.parse(
-        'https://my-shop-a4071-default-rtdb.firebaseio.com/products/$id.json');
+    final url = Uri.parse('https://my-shop-a4071-default-rtdb.firebaseio.com/products/$id.json');
+
     final existingProductIndex =
         _items.indexWhere((element) => element.id == id);
     Product? existingProduct = _items[existingProductIndex];
