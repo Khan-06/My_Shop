@@ -129,8 +129,7 @@ class Products with ChangeNotifier {
     final prodIndex = _items.indexWhere((element) => element.id == id);
     if (prodIndex >= 0) {
       _items[prodIndex] = newProduct;
-      final url = Uri.parse(
-          'https://my-shop-a4071-default-rtdb.firebaseio.com/products/$id.json');
+      final url = Uri.parse('https://my-shop-a4071-default-rtdb.firebaseio.com/products/$id.json');
       await http.patch(url,
           body: json.encode({
             'title': newProduct.title,
