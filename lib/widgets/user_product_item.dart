@@ -36,7 +36,7 @@ class UserProductItem extends StatelessWidget {
                    await Provider.of<Products>(context, listen: false).deleteProduct(id);
                   }
                   catch (error) {
-                   PopUpBar(title: "Deleting Failed", message: 'Request failed due to some reason', ctx: context);
+                   PopUpBar(title: "Deleting Failed", message: error.toString(), ctx: context);
                   }
                 },
                 icon: const Icon(Icons.delete, color: Colors.red),
