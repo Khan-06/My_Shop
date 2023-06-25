@@ -101,7 +101,6 @@ class Products with ChangeNotifier {
           },
         ),
       );
-      print(json.decode(response.body));
       final newProduct = Product(
           id: json.decode(response.body)['name'],
           description: product.description,

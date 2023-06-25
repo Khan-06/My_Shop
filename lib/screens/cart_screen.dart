@@ -37,30 +37,7 @@ class CartScreen extends StatelessWidget {
                     ),
                     backgroundColor: Theme.of(context).colorScheme.primary,
                   ),
-                  TextButton(
-                    onPressed: () {
-                      Provider.of<Orders>(context, listen: false).addOrder(
-                          cartData.items.values.toList(), cartData.totalAmount);
-                      if (cartData.items.isEmpty) {
-                        PopUpBar(
-                            title: 'Empty Cart',
-                            message:
-                                'Please add items to your cart before placing an order!',
-                            ctx: context);
-                      } else {
-                        PopUpBar(
-                          title: 'Order Confirmation',
-                          message:
-                              'We have received your order and are preparing it for delivery!',
-                          ctx: context,
-                          icon: Icon(Icons.check_circle,
-                              color: Theme.of(context).colorScheme.primary),
-                        );
-                      }
-                      cartData.clear();
-                    },
-                    child: const Text('Order Now'),
-                  )
+                  OrderButton(cart: cartData)
                 ],
               ),
             ),
@@ -80,5 +57,54 @@ class CartScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class OrderButton extends StatefulWidget {
+  OrderButton({required this.cart});
+  final Cart cart;
+
+  @override
+  State<OrderButton> createState() => _OrderButtonState();
+}
+
+class _OrderButtonState extends State<OrderButton> {
+  var _isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+        onPressed: (widget.cart.totalAmount <= 0 || _isLoading)
+            ? null
+            : () async {
+                setState(() {
+                  _isLoading = true;
+                });
+                await Provider.of<Orders>(context, listen: false).addOrder(
+                    widget.cart.items.values.toList(), widget.cart.totalAmount);
+                // if (cart.items.isEmpty) {
+                //   PopUpBar(
+                //       title: 'Empty Cart',
+                //       message:
+                //           'Please add items to your cart before placing an order!',
+                //       ctx: context);
+                // } else {
+                //   PopUpBar(
+                //     title: 'Order Confirmation',
+                //     message:
+                //         'We have received your order and are preparing it for delivery!',
+                //     ctx: context,
+                //     icon: Icon(Icons.check_circle,
+                //         color: Theme.of(context).colorScheme.primary),
+                //   );
+                // }
+                setState(() {
+                  _isLoading = false;
+                });
+                widget.cart.clear();
+              },
+        child: _isLoading
+            ? const CircularProgressIndicator()
+            : const Text('Order Now'));
   }
 }
