@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         title: 'MyShop',
         theme: ThemeData.light().copyWith(
             colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.orange)
-                .copyWith(secondary: Colors.amber),
+                 .copyWith(secondary: Colors.amber),
             textTheme: GoogleFonts.latoTextTheme()),
         home: const ProductOverViewScreen(),
         routes: {
