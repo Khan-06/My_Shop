@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../providers/cart.dart' show Cart;
 import '../widgets/cart_item.dart';
 import '../providers/orders.dart';
-import '../widgets/pop_up_bottomBar.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -60,8 +59,10 @@ class CartScreen extends StatelessWidget {
   }
 }
 
+
+
 class OrderButton extends StatefulWidget {
-  OrderButton({required this.cart});
+  const OrderButton({super.key, required this.cart});
   final Cart cart;
 
   @override
@@ -69,42 +70,22 @@ class OrderButton extends StatefulWidget {
 }
 
 class _OrderButtonState extends State<OrderButton> {
-  var _isLoading = false;
-
+  bool _isLoading =  false;
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-        onPressed: (widget.cart.totalAmount <= 0 || _isLoading)
-            ? null
-            : () async {
-                setState(() {
-                  _isLoading = true;
-                });
-                await Provider.of<Orders>(context, listen: false).addOrder(
-                    widget.cart.items.values.toList(), widget.cart.totalAmount);
-                // if (cart.items.isEmpty) {
-                //   PopUpBar(
-                //       title: 'Empty Cart',
-                //       message:
-                //           'Please add items to your cart before placing an order!',
-                //       ctx: context);
-                // } else {
-                //   PopUpBar(
-                //     title: 'Order Confirmation',
-                //     message:
-                //         'We have received your order and are preparing it for delivery!',
-                //     ctx: context,
-                //     icon: Icon(Icons.check_circle,
-                //         color: Theme.of(context).colorScheme.primary),
-                //   );
-                // }
-                setState(() {
-                  _isLoading = false;
-                });
-                widget.cart.clear();
-              },
-        child: _isLoading
-            ? const CircularProgressIndicator()
-            : const Text('Order Now'));
+    return  TextButton(onPressed: (widget.cart.totalAmount <= 0 || _isLoading)
+        ? null
+        : () async {
+      setState(() {
+        _isLoading = true;
+      });
+      await Provider.of<Orders>(context, listen: false)
+          .addOrder(widget.cart.items.values.toList(),
+          widget.cart.totalAmount);
+      setState(() {
+        _isLoading = false;
+      });
+      widget.cart.clear();
+    }, child: _isLoading ? const  CircularProgressIndicator() : const Text('Order Now'));
   }
 }
