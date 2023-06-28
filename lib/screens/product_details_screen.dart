@@ -28,19 +28,24 @@ class ProductDetails extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          Text(
-            '\$${productData.price}',
-            style: const TextStyle(color: Colors.grey, fontSize: 20),
+          Column(
+            children: [
+              Text(
+                '\$${productData.price}',
+                style: const TextStyle(color: Colors.grey, fontSize: 20),
+              ),
+              const SizedBox(height: 10),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                width: MediaQuery.of(context).size.width,
+                child: Text(
+                  productData.description,
+                  textAlign: TextAlign.center,
+                  softWrap: true,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 10),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-              width: double.infinity,
-              child: Text(
-                productData.description,
-                textAlign: TextAlign.center,
-                softWrap: true,
-              ))
         ],
       ),
     );
