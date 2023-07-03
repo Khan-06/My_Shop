@@ -32,7 +32,7 @@ class ProductDetails extends StatelessWidget {
             children: [
               Text(
                 '\$${productData.price}',
-                style: const TextStyle(color: Colors.grey, fontSize: 20),
+                style: const TextStyle(color: Colors.grey, fontSize: 20), //Starting the module
               ),
               const SizedBox(height: 10),
               Container(
