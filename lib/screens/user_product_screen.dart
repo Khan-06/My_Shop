@@ -33,8 +33,7 @@ class UserProductScreen extends StatelessWidget {
       drawer: const AppDrawer(),
       body: RefreshIndicator(
         onRefresh: () => _refreshPage(context),
-        child: Padding(
-          padding: const EdgeInsets.all(8),
+        child: Expanded(
           child: ListView.builder(
               itemBuilder: (_, index) => UserProductItem(
                   id: productsData.items[index].id,

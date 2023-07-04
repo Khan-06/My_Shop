@@ -65,7 +65,7 @@ class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
                   ],
               icon: const Icon(Icons.more_vert),
               onSelected: (filterOptions selectedValue) {
-                print(selectedValue);
+                //print(selectedValue);
                 setState(() {
                   if (selectedValue == filterOptions.Favorites) {
                     _showOnlyFavorites = true;
@@ -75,10 +75,10 @@ class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
                 });
               }),
           Consumer<Cart>(
-            builder: (_, cartData, ch) => MyBadge(
+            builder: (_, cartData, child) => MyBadge(
                 value:
                     cartData.itemCount.toString(), //Check this if error comes..
-                child: ch as Widget),
+                child: child as Widget),
             child: IconButton(
               onPressed: () {
                 Navigator.pushNamed(context, CartScreen.routeName);

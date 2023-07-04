@@ -6,6 +6,7 @@ import 'product.dart';
 import '../models/http_exception.dart';
 
 class Products with ChangeNotifier {
+
   List<Product> _items = [
     // Product(
     //   id: 'p1',
@@ -62,11 +63,10 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
-    final url = Uri.parse(
-        'https://my-shop-a4071-default-rtdb.firebaseio.com/products.json'); //check for errors
+    final url = Uri.parse('https://my-shop-a4071-default-rtdb.firebaseio.com/products.json');
     try {
       final response = await http.get(url);
-      print(json.decode(response.body));
+      //print(json.decode(response.body));
       final List<Product> loadedProducts = [];
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       if(extractedData == null){
