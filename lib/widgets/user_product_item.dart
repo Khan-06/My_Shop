@@ -21,7 +21,7 @@ class UserProductItem extends StatelessWidget {
           backgroundImage: NetworkImage(imageUrl),
         ),
         trailing: SizedBox(
-          width: MediaQuery.of(context).size.width / 5,
+          width: MediaQuery.of(context).size.width / 4,
           child: Row(
             children: [
               IconButton(
