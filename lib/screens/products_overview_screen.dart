@@ -25,12 +25,12 @@ class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
   bool _showOnlyFavorites = false;
   bool _isInit = true;
   bool _isLoading = false;
-
-  @override
-  void initState() {
-    // Provider.of<Products>(context).fetchAndSetProducts();  Not Working
-    super.initState();
-  }
+  //
+  // @override
+  // void initState() {
+  //   // Provider.of<Products>(context).fetchAndSetProducts();  Not Working
+  //   super.initState();
+  // }
 
   @override
   void didChangeDependencies() {
