@@ -12,6 +12,7 @@ import './screens/edit_products_screen.dart';
 import './screens/products_overview_screen.dart';
 import './screens/product_details_screen.dart';
 import './screens/cart_screen.dart';
+import './screens/auth_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
             colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.orange)
                  .copyWith(secondary: Colors.amber),
             textTheme: GoogleFonts.latoTextTheme()),
-        home: const ProductOverViewScreen(),
+        home: AuthScreen(),
         routes: {
           ProductDetails.routeName: (ctx) => ProductDetails(),
           CartScreen.routeName: (ctx) => const CartScreen(),
