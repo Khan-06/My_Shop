@@ -7,23 +7,23 @@ class Auth with ChangeNotifier {
   late final DateTime _expiryDate;
   late final String _userId;
 
-  Future<void> signUp(String email, String password) async {
+
+  Future<void> _authentication (String email, String password, String urlSegment) async {
     final url = Uri.parse(
-        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAh2sctSnLg_nyUPrrGnpjyzQa1KlIKheU');
+        'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=AIzaSyAh2sctSnLg_nyUPrrGnpjyzQa1KlIKheU');
     final response = await http.post(
       url,
       body: json.encode(
         {'email': email, 'password': password, 'returnSecureToken': true},
       ),
     );
-    print(response.body);
+    print(json.decode(response.body));
+  }
+
+  Future<void> signUp(String email, String password) async {
+   _authentication(email, password, 'signUp');
   }
   Future<void> logIn (String email, String password) async {
-    final url = Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAh2sctSnLg_nyUPrrGnpjyzQa1KlIKheU');
-    final response = http.post(url, body: json.encode({
-      'email': email,
-      'password': password,
-      'returnSecureToken': true
-    }));
+   _authentication(email, password, 'signInWithPassword');
   }
 }
