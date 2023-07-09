@@ -21,9 +21,9 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> signUp(String email, String password) async {
-   _authentication(email, password, 'signUp');
+    return _authentication(email, password, 'signUp');
   }
   Future<void> logIn (String email, String password) async {
-   _authentication(email, password, 'signInWithPassword');
+   return _authentication(email, password, 'signInWithPassword');
   }
 }
