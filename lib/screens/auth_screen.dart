@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import '../models/http_exception.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth.dart';
 
@@ -42,8 +43,8 @@ class AuthScreen extends StatelessWidget {
                   Flexible(
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 20.0),
-                      padding:
-                          const EdgeInsets.symmetric(vertical: 8.0, horizontal: 94.0),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 94.0),
                       transform: Matrix4.rotationZ(-8 * pi / 180)
                         ..translate(-10.0),
                       // ..translate(-10.0),
@@ -71,7 +72,7 @@ class AuthScreen extends StatelessWidget {
                   ),
                   Flexible(
                     flex: deviceSize.width > 600 ? 2 : 1,
-                    child:  const AuthCard(),
+                    child: const AuthCard(),
                   ),
                 ],
               ),
@@ -100,6 +101,18 @@ class _AuthCardState extends State<AuthCard> {
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
+  void _showErrorDialogue (String message){
+    showDialog(context: context, builder: (context) => AlertDialog(
+      title: const Text('An Error Occurred!'),
+      content: Text(message),
+      actions: [
+        TextButton(onPressed: (){
+          Navigator.pop(context);
+        }, child: const Text('Close'))
+      ],
+    ));
+  }
+
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) {
       // Invalid!
@@ -109,12 +122,36 @@ class _AuthCardState extends State<AuthCard> {
     setState(() {
       _isLoading = true;
     });
-    if (_authMode == AuthMode.Login) {
-      // Log user in
-      await Provider.of<Auth>(context, listen: false).logIn(_authData['email']!, _authData['password']!);
-    } else {
-      // Sign user up
-     await Provider.of<Auth>(context,listen: false).signUp(_authData['email']!, _authData['password']!);
+    try {
+      if (_authMode == AuthMode.Login) {
+        // Log user in
+        await Provider.of<Auth>(context, listen: false)
+            .logIn(_authData['email']!, _authData['password']!);
+      } else {
+        // Sign user up
+        await Provider.of<Auth>(context, listen: false)
+            .signUp(_authData['email']!, _authData['password']!);
+      }
+    } on HttpException catch (error) {
+      var errorMessage = 'Authentication Failed';
+      if(error.message.contains('EMAIL_EXISTS')){
+        errorMessage = 'This email address is already in use.';
+      }
+      else if(error.message.contains('INVALID_EMAIL')){
+        errorMessage = 'Email is Invalid';
+      }
+      else if(error.message.contains('WEAK_PASSWORD')){
+        errorMessage = 'Your password is weak';
+      }
+      else if(error.message.contains('EMAIL_NOT_FOUND')){
+        errorMessage = 'Could not find the user with that email';
+    } else if(error.message.contains('INVALID_PASSWORD')){
+        errorMessage = 'Invalid Password';
+    }
+
+
+    } catch (error) {
+      const errorMessage = 'Something went wrong. Try again later.';
     }
     setState(() {
       _isLoading = false;
@@ -182,7 +219,8 @@ class _AuthCardState extends State<AuthCard> {
                 if (_authMode == AuthMode.Signup)
                   TextFormField(
                     enabled: _authMode == AuthMode.Signup,
-                    decoration: const InputDecoration(labelText: 'Confirm Password'),
+                    decoration:
+                        const InputDecoration(labelText: 'Confirm Password'),
                     obscureText: true,
                     validator: _authMode == AuthMode.Signup
                         ? (value) {
@@ -202,21 +240,28 @@ class _AuthCardState extends State<AuthCard> {
                   ElevatedButton(
                     onPressed: _submit,
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: Theme.of(context).primaryTextTheme.labelLarge?.color, backgroundColor: Theme.of(context).primaryColor, shape: RoundedRectangleBorder(
+                      foregroundColor:
+                          Theme.of(context).primaryTextTheme.labelLarge?.color,
+                      backgroundColor: Theme.of(context).primaryColor,
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30.0, vertical: 8.0),
                     ),
-                    child: Text(_authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP'),
+                    child:
+                        Text(_authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP'),
                   ),
                 TextButton(
                   onPressed: _switchAuthMode,
                   style: TextButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 6),
-
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 30, vertical: 6),
                   ),
                   child: Text(
-                      '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD', style: TextStyle(color: Theme.of(context).colorScheme.primary)),
+                      '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary)),
                 ),
               ],
             ),
@@ -226,7 +271,6 @@ class _AuthCardState extends State<AuthCard> {
     );
   }
 }
-
 
 //
 // padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
