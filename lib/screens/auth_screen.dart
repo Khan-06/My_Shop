@@ -5,10 +5,12 @@ import '../models/http_exception.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth.dart';
 
-enum AuthMode { Signup, Login }
+enum AuthMode { signUp, login }
 
 class AuthScreen extends StatelessWidget {
   static const routeName = '/auth';
+
+  const AuthScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +95,7 @@ class AuthCard extends StatefulWidget {
 
 class _AuthCardState extends State<AuthCard> {
   final GlobalKey<FormState> _formKey = GlobalKey();
-  AuthMode _authMode = AuthMode.Login;
+  AuthMode _authMode = AuthMode.login;
   final Map<String, String> _authData = {
     'email': '',
     'password': '',
@@ -123,7 +125,7 @@ class _AuthCardState extends State<AuthCard> {
       _isLoading = true;
     });
     try {
-      if (_authMode == AuthMode.Login) {
+      if (_authMode == AuthMode.login) {
         // Log user in
         await Provider.of<Auth>(context, listen: false)
             .logIn(_authData['email']!, _authData['password']!);
@@ -159,13 +161,13 @@ class _AuthCardState extends State<AuthCard> {
   }
 
   void _switchAuthMode() {
-    if (_authMode == AuthMode.Login) {
+    if (_authMode == AuthMode.login) {
       setState(() {
-        _authMode = AuthMode.Signup;
+        _authMode = AuthMode.signUp;
       });
     } else {
       setState(() {
-        _authMode = AuthMode.Login;
+        _authMode = AuthMode.login;
       });
     }
   }
@@ -179,9 +181,9 @@ class _AuthCardState extends State<AuthCard> {
       ),
       elevation: 8.0,
       child: Container(
-        height: _authMode == AuthMode.Signup ? 320 : 260,
+        height: _authMode == AuthMode.signUp ? 320 : 260,
         constraints:
-            BoxConstraints(minHeight: _authMode == AuthMode.Signup ? 320 : 260),
+            BoxConstraints(minHeight: _authMode == AuthMode.signUp ? 320 : 260),
         width: deviceSize.width * 0.75,
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -216,13 +218,13 @@ class _AuthCardState extends State<AuthCard> {
                     _authData['password'] = value!;
                   },
                 ),
-                if (_authMode == AuthMode.Signup)
+                if (_authMode == AuthMode.signUp)
                   TextFormField(
-                    enabled: _authMode == AuthMode.Signup,
+                    enabled: _authMode == AuthMode.signUp,
                     decoration:
                         const InputDecoration(labelText: 'Confirm Password'),
                     obscureText: true,
-                    validator: _authMode == AuthMode.Signup
+                    validator: _authMode == AuthMode.signUp
                         ? (value) {
                             if (value != _passwordController.text) {
                               return 'Passwords do not match!';
@@ -250,7 +252,7 @@ class _AuthCardState extends State<AuthCard> {
                           horizontal: 30.0, vertical: 8.0),
                     ),
                     child:
-                        Text(_authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP'),
+                        Text(_authMode == AuthMode.login ? 'LOGIN' : 'SIGN UP'),
                   ),
                 TextButton(
                   onPressed: _switchAuthMode,
@@ -259,7 +261,7 @@ class _AuthCardState extends State<AuthCard> {
                         const EdgeInsets.symmetric(horizontal: 30, vertical: 6),
                   ),
                   child: Text(
-                      '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD',
+                      '${_authMode == AuthMode.login ? 'SIGNUP' : 'LOGIN'} INSTEAD',
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.primary)),
                 ),
