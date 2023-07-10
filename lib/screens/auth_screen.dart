@@ -148,10 +148,10 @@ class _AuthCardState extends State<AuthCard> {
     } else if(error.message.contains('INVALID_PASSWORD')){
         errorMessage = 'Invalid Password';
     }
-
-
+      _showErrorDialogue(errorMessage);
     } catch (error) {
       const errorMessage = 'Something went wrong. Try again later.';
+      _showErrorDialogue(errorMessage);
     }
     setState(() {
       _isLoading = false;
