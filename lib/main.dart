@@ -24,28 +24,33 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (ctx) => Products()),
-        ChangeNotifierProvider(create: (ctx) => Cart()),
-        ChangeNotifierProvider(create: (ctx) => Orders()),
-        ChangeNotifierProvider(create: (ctx) => Auth(),)
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'MyShop',
-        theme: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.orange)
-                 .copyWith(secondary: Colors.amber),
-            textTheme: GoogleFonts.latoTextTheme()),
-        home: const AuthScreen(),
-        routes: {
-          ProductDetails.routeName: (ctx) => ProductDetails(),
-          CartScreen.routeName: (ctx) => const CartScreen(),
-          OrdersScreen.routeName: (context) => const OrdersScreen(),
-          UserProductScreen.routeName: (context) => const UserProductScreen(),
-          EditProductsScreen.routeName: (context) => const EditProductsScreen()
-        },
-      ),
-    );
+        providers: [
+          ChangeNotifierProvider(create: (ctx) => Products()),
+          ChangeNotifierProvider(create: (ctx) => Cart()),
+          ChangeNotifierProvider(create: (ctx) => Orders()),
+          ChangeNotifierProvider(
+            create: (ctx) => Auth(),
+          )
+        ],
+        child: Consumer<Auth>(
+            builder: (context, value, _) => MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  title: 'MyShop',
+                  theme: ThemeData.light().copyWith(
+                      colorScheme:
+                          ColorScheme.fromSwatch(primarySwatch: Colors.orange)
+                              .copyWith(secondary: Colors.amber),
+                      textTheme: GoogleFonts.latoTextTheme()),
+                  home: const AuthScreen(),
+                  routes: {
+                    ProductDetails.routeName: (ctx) => ProductDetails(),
+                    CartScreen.routeName: (ctx) => const CartScreen(),
+                    OrdersScreen.routeName: (context) => const OrdersScreen(),
+                    UserProductScreen.routeName: (context) =>
+                        const UserProductScreen(),
+                    EditProductsScreen.routeName: (context) =>
+                        const EditProductsScreen()
+                  },
+                )));
   }
 }
