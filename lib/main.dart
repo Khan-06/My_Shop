@@ -14,7 +14,6 @@ import './screens/products_overview_screen.dart';
 import './screens/product_details_screen.dart';
 import './screens/cart_screen.dart';
 import './screens/auth_screen.dart';
-import './providers/auth.dart';
 
 void main() => runApp(MyApp());
 
@@ -28,12 +27,10 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (ctx) => Products()),
           ChangeNotifierProvider(create: (ctx) => Cart()),
           ChangeNotifierProvider(create: (ctx) => Orders()),
-          ChangeNotifierProvider(
-            create: (ctx) => Auth(),
-          )
+          ChangeNotifierProvider(create: (ctx) => Auth())
         ],
         child: Consumer<Auth>(
-            builder: (context, value, _) => MaterialApp(
+            builder: (context, auth, _) => MaterialApp(
                   debugShowCheckedModeBanner: false,
                   title: 'MyShop',
                   theme: ThemeData.light().copyWith(
@@ -41,7 +38,7 @@ class MyApp extends StatelessWidget {
                           ColorScheme.fromSwatch(primarySwatch: Colors.orange)
                               .copyWith(secondary: Colors.amber),
                       textTheme: GoogleFonts.latoTextTheme()),
-                  home: const AuthScreen(),
+                  home: auth.isAuth ?  ProductOverViewScreen() : AuthScreen(),
                   routes: {
                     ProductDetails.routeName: (ctx) => ProductDetails(),
                     CartScreen.routeName: (ctx) => const CartScreen(),

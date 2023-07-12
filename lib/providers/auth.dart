@@ -6,7 +6,7 @@ import '../models/http_exception.dart';
 
 class Auth with ChangeNotifier {
   late final String? _token;
-  late final DateTime? _expiryDate;
+  late  DateTime? _expiryDate = null; //Check for errors later
   late final String _userId;
 
   bool get isAuth {
@@ -36,6 +36,10 @@ class Auth with ChangeNotifier {
       if(responseData != null){
         throw HttpException(responseData['error']['message']);
       }
+      _token = responseData['idToken'];
+      _userId = responseData['localId'];
+      _expiryDate = DateTime.now().add(Duration(seconds: int.parse(responseData['expiresIn'])));
+      notifyListeners();
     }catch(error){
       rethrow;
     }
