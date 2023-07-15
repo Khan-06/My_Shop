@@ -25,14 +25,21 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (ctx) => Auth()),
-          ChangeNotifierProxyProvider<Auth, Products>(
+          // ChangeNotifierProxyProvider<Auth, Products>(
+          //     create: (context) {
+          //       final auth = Provider.of<Auth>(context, listen: false);
+          //       return Products(auth.token.toString(), []); // <-- Use auth.token.toString()
+          //     },
+          //     update: (ctx, auth, previousProducts) => Products(
+          //         auth.token.toString(),
+          //         previousProducts == null ? [] : previousProducts.items)),
+          ChangeNotifierProxyProvider<Auth, Products>(update: (ctx, auth, previousProducts) => Products(
+             auth.token.toString(),previousProducts == null ? [] : previousProducts.items),
               create: (context) {
                 final auth = Provider.of<Auth>(context, listen: false);
                 return Products(auth.token.toString(), []); // <-- Use auth.token.toString()
               },
-              update: (ctx, auth, previousProducts) => Products(
-                  auth.token.toString(),
-                  previousProducts == null ? [] : previousProducts.items)),
+          ),
           ChangeNotifierProvider(create: (ctx) => Cart()),
           ChangeNotifierProvider(create: (ctx) => Orders()),
         ],
