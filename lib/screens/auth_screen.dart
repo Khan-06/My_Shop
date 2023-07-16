@@ -149,12 +149,10 @@ class _AuthCardState extends State<AuthCard> {
         errorMessage = 'Could not find the user with that email';
     } else if(error.message.contains('INVALID_PASSWORD')){
         errorMessage = 'Invalid Password';
-    } else if(error.message.contains('USER_DISABLED')) {
-        errorMessage = 'This user is disabled';
-      }
+    }
       _showErrorDialogue(errorMessage);
     } catch (error) {
-      final errorMessage = error.toString();
+      const errorMessage = 'Something went wrong. Try again later.';
       _showErrorDialogue(errorMessage);
     }
     setState(() {
