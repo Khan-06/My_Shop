@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_shop/providers/auth.dart';
 import 'package:provider/provider.dart';
 
 import './providers/cart.dart';
@@ -22,29 +23,45 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (ctx) => Products()),
-        ChangeNotifierProvider(create: (ctx) => Cart()),
-        ChangeNotifierProvider(
-          create: (context) => Orders(),
-        )
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'MyShop',
-        theme: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.orange)
-                 .copyWith(secondary: Colors.amber),
-            textTheme: GoogleFonts.latoTextTheme()),
-        home: AuthScreen(),
-        routes: {
-          ProductDetails.routeName: (ctx) => ProductDetails(),
-          CartScreen.routeName: (ctx) => const CartScreen(),
-          OrdersScreen.routeName: (context) => const OrdersScreen(),
-          UserProductScreen.routeName: (context) => const UserProductScreen(),
-          EditProductsScreen.routeName: (context) => const EditProductsScreen()
-        },
-      ),
-    );
+        providers: [
+          ChangeNotifierProvider(create: (ctx) => Auth()),
+          // ChangeNotifierProxyProvider<Auth, Products>(
+          //     create: (context) {
+          //       final auth = Provider.of<Auth>(context, listen: false);
+          //       return Products(auth.token.toString(), []); // <-- Use auth.token.toString()
+          //     },
+          //     update: (ctx, auth, previousProducts) => Products(
+          //         auth.token.toString(),
+          //         previousProducts == null ? [] : previousProducts.items)),
+          ChangeNotifierProxyProvider<Auth, Products>(update: (ctx, auth, previousProducts) => Products(
+             auth.token.toString(),previousProducts == null ? [] : previousProducts.items),
+              create: (context) {
+                final auth = Provider.of<Auth>(context, listen: false);
+                return Products(auth.token.toString(), []); // <-- Use auth.token.toString()
+              },
+          ),
+          ChangeNotifierProvider(create: (ctx) => Cart()),
+          ChangeNotifierProvider(create: (ctx) => Orders()),
+        ],
+        child: Consumer<Auth>(
+            builder: (context, auth, _) => MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  title: 'MyShop',
+                  theme: ThemeData.light().copyWith(
+                      colorScheme:
+                          ColorScheme.fromSwatch(primarySwatch: Colors.orange)
+                              .copyWith(secondary: Colors.amber),
+                      textTheme: GoogleFonts.latoTextTheme()),
+                  home: auth.isAuth ? ProductOverViewScreen() : AuthScreen(),
+                  routes: {
+                    ProductDetails.routeName: (ctx) => ProductDetails(),
+                    CartScreen.routeName: (ctx) => const CartScreen(),
+                    OrdersScreen.routeName: (context) => const OrdersScreen(),
+                    UserProductScreen.routeName: (context) =>
+                        const UserProductScreen(),
+                    EditProductsScreen.routeName: (context) =>
+                        const EditProductsScreen()
+                  },
+                )));
   }
 }
