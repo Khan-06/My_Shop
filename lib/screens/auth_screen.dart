@@ -152,7 +152,7 @@ class _AuthCardState extends State<AuthCard> {
     }
       _showErrorDialogue(errorMessage);
     } catch (error) {
-      const errorMessage = 'Something went wrong. Try again later.';
+      var errorMessage = error.toString();
       _showErrorDialogue(errorMessage);
     }
     setState(() {

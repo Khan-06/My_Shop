@@ -93,7 +93,7 @@ class Products with ChangeNotifier {
 
   Future<void> addProducts(Product product) async {
     var url = Uri.https(
-        'my-shop-a4071-default-rtdb.firebaseio.com', '/products.json?auth=$authToken');
+        'my-shop-a4071-default-rtdb.firebaseio.com', '/products.json', {'auth': authToken},);
     try {
       final response = await http.post(
         url,

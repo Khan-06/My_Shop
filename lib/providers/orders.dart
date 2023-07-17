@@ -28,7 +28,7 @@ class Orders with ChangeNotifier {
   }
 
   Future<void> fetchAndSetOrders() async {
-    var url = Uri.https('my-shop-a4071-default-rtdb.firebaseio.com', '/orders.json?auth=$authToken');
+    var url = Uri.https('my-shop-a4071-default-rtdb.firebaseio.com', '/orders.json', {'auth': authToken},);
     final response = await http.get(url);
 
     final extractedData = json.decode(response.body) as Map<String, dynamic>?;
@@ -64,7 +64,7 @@ class Orders with ChangeNotifier {
   }
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
     var url =
-    Uri.https('my-shop-a4071-default-rtdb.firebaseio.com', '/orders.json');
+    Uri.https('my-shop-a4071-default-rtdb.firebaseio.com','/orders.json', {'auth': authToken},);
     final timeStamp = DateTime.now();
     final response = await http.post(url,
         body: json.encode({
