@@ -93,7 +93,7 @@ class Products with ChangeNotifier {
 
   Future<void> addProducts(Product product) async {
     var url = Uri.https(
-        'my-shop-a4071-default-rtdb.firebaseio.com', '/products.json');
+        'my-shop-a4071-default-rtdb.firebaseio.com', '/products.json?auth=$authToken');
     try {
       final response = await http.post(
         url,
@@ -135,7 +135,7 @@ class Products with ChangeNotifier {
     final prodIndex = _items.indexWhere((element) => element.id == id);
     if (prodIndex >= 0) {
       _items[prodIndex] = newProduct;
-      final url = Uri.parse('https://my-shop-a4071-default-rtdb.firebaseio.com/products/$id.json');
+      final url = Uri.parse('https://my-shop-a4071-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken');
       await http.patch(url,
           body: json.encode({
             'title': newProduct.title,
@@ -150,7 +150,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> deleteProduct(String id) async {
-    final url = Uri.parse('https://my-shop-a4071-default-rtdb.firebaseio.com/products/$id.json');
+    final url = Uri.parse('https://my-shop-a4071-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken');
 
     final existingProductIndex =
         _items.indexWhere((element) => element.id == id);
