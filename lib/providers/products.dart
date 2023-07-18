@@ -61,8 +61,8 @@ class Products with ChangeNotifier {
     return items.where((element) => element.isFavorite).toList();
   }
 
-  Product findById(String Id) {
-    return items.firstWhere((element) => element.id == Id);
+  Product findById(String id) {
+    return items.firstWhere((element) => element.id == id);
   }
 
   Future<void> fetchAndSetProducts() async {
