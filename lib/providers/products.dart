@@ -43,8 +43,9 @@ class Products with ChangeNotifier {
   ];
   var _showFavoritesOnly = false;
   final String authToken;
+  final String userID;
 
-  Products(this.authToken, this._items);
+  Products(this.authToken, this.userID ,this._items);
 
   List<Product> get items {
     if (_showFavoritesOnly) {
@@ -75,6 +76,9 @@ class Products with ChangeNotifier {
       if(extractedData == null){
         return;
       }
+      final favUrl = Uri.parse('https://my-shop-a4071-default-rtdb.firebaseio.com/userFavorites/$userID.json?auth=$authToken');
+      final favResponse = await http.get(favUrl);
+      final favData = json.decode(favResponse.body);
       extractedData.forEach((prodId, prodData) {
         loadedProducts.add(Product(
             id: prodId,
@@ -82,7 +86,7 @@ class Products with ChangeNotifier {
             title: prodData['title'],
             imageUrl: prodData['imageUrl'],
             price: prodData['price'],
-            isFavorite: prodData['isFavorite']));
+            isFavorite: favData == null ? false : favData[prodId] ?? false));
       });
       _items = loadedProducts;
       notifyListeners();
