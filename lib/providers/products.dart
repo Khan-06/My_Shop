@@ -67,17 +67,17 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
-    final url = Uri.parse('https://my-shop-a4071-default-rtdb.firebaseio.com/products.json?auth=$authToken');
+    var url = Uri.parse('https://my-shop-a4071-default-rtdb.firebaseio.com/products.json?auth=$authToken');
     try {
       final response = await http.get(url);
       //print(json.decode(response.body));
       final List<Product> loadedProducts = [];
-      final Map<String, dynamic>? extractedData = json.decode(response.body) as Map<String, dynamic>;
+      final Map<String, dynamic>? extractedData = json.decode(response.body);
       if(extractedData == null){
         return;
       }
-      final favUrl = Uri.parse('https://my-shop-a4071-default-rtdb.firebaseio.com/userFavorites/$userID.json?auth=$authToken');
-      final favResponse = await http.get(favUrl);
+      url = Uri.parse('https://my-shop-a4071-default-rtdb.firebaseio.com/userFavorites/$userID.json?auth=$authToken');
+      final favResponse = await http.get(url);
       final favData = json.decode(favResponse.body);
       extractedData.forEach((prodId, prodData) {
         loadedProducts.add(Product(
