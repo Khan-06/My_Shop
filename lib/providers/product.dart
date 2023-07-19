@@ -31,10 +31,10 @@ class Product with ChangeNotifier {
     final url = Uri.parse(
         'https://my-shop-a4071-default-rtdb.firebaseio.com/userFavorites/$userID/$id.json?auth=$token');
     try {
-      final response = await http.patch(
+      final response = await http.put(
         url,
         body: json.encode(
-          {'isFavorite': isFavorite},
+          isFavorite,
         ),
       );
       if (response.statusCode >= 400) {
