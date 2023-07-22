@@ -66,8 +66,9 @@ class Products with ChangeNotifier {
     return items.firstWhere((element) => element.id == id);
   }
 
-  Future<void> fetchAndSetProducts() async {
-    var url = Uri.parse('https://my-shop-a4071-default-rtdb.firebaseio.com/products.json?auth=$authToken&orderBy="creatorId"&equalTo="$userID"');
+  Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
+    final filterUrl = filterByUser ? 'orderBy="creatorId"&equalTo="$userID"' : '';
+    var url = Uri.parse('https://my-shop-a4071-default-rtdb.firebaseio.com/products.json?auth=$authToken&$filterUrl');
     try {
       final response = await http.get(url);
       //print(json.decode(response.body));
