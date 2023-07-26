@@ -56,10 +56,13 @@ class Auth with ChangeNotifier {
       );
       autoLogOut();
       notifyListeners();
-      final prefrences = await SharedPreferences.getInstance();
-      final userData = json.encode(
-          {'token': _token, 'userId': _userId, 'expiryDate': _expiryDate?.toIso8601String()});
-      prefrences.setString('userData', userData);
+      final preferences = await SharedPreferences.getInstance();
+      final userData = json.encode({
+        'token': _token,
+        'userId': _userId,
+        'expiryDate': _expiryDate?.toIso8601String()
+      });
+      preferences.setString('userData', userData);
     } catch (error) {
       rethrow;
     }
@@ -71,6 +74,26 @@ class Auth with ChangeNotifier {
 
   Future<void> logIn(String email, String password) async {
     return _authentication(email, password, 'signInWithPassword');
+  }
+
+  Future<bool> tryAutoLogIn() async {
+    final preferences = await SharedPreferences.getInstance();
+    if (!preferences.containsKey('userData')) {
+      return false;
+    }
+    final extractedData =
+        json.decode(preferences.getString('userData').toString())
+            as Map<String, dynamic>; //Check here if something goes wrong!
+    final expiryDate = DateTime.parse(extractedData['expiryDate']);
+    if (expiryDate.isBefore(DateTime.now())) {
+      return false;
+    }
+    _token = extractedData['token'];
+    _userId = extractedData['userId'];
+    _expiryDate = expiryDate;
+    notifyListeners();
+    autoLogOut();
+    return true;
   }
 
   void logout() {
