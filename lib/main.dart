@@ -14,6 +14,7 @@ import './screens/products_overview_screen.dart';
 import './screens/product_details_screen.dart';
 import './screens/cart_screen.dart';
 import './screens/auth_screen.dart';
+import './screens/splash_screen.dart';
 
 void main() => runApp(const MyApp());
 
@@ -58,7 +59,10 @@ class MyApp extends StatelessWidget {
                       textTheme: GoogleFonts.latoTextTheme()),
                   home: auth.isAuth
                       ? const ProductOverViewScreen()
-                      : const AuthScreen(),
+                      : FutureBuilder(
+                    future: auth.tryAutoLogIn(),
+                    builder: (context, snapshot) => snapshot.connectionState == ConnectionState.waiting ? SplashScreen() : const AuthScreen(),
+                  ),
                   routes: {
                     ProductDetails.routeName: (ctx) => ProductDetails(),
                     CartScreen.routeName: (ctx) => const CartScreen(),
