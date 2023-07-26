@@ -96,7 +96,7 @@ class Auth with ChangeNotifier {
     return true;
   }
 
-  void logout() {
+  Future<void> logout() async {
     _token = null;
     _userId = '';
     _expiryDate = null;
@@ -105,6 +105,8 @@ class Auth with ChangeNotifier {
       _authTimer = null;
     }
     notifyListeners();
+    final preferences = await SharedPreferences.getInstance();
+    preferences.clear(); //.clear clears every stored data whereas remove only remove specific data!
   }
 
   void autoLogOut() {
