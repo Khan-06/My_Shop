@@ -102,7 +102,8 @@ class _AuthCardState extends State<AuthCard> {
   };
   var _isLoading = false;
   final _passwordController = TextEditingController();
-  var containerHeight = 260;
+  late AnimationController _controller;
+  late Animation<Size> _heightAnimation;
 
   void _showErrorDialogue (String message){
     showDialog(context: context, builder: (context) => AlertDialog(
