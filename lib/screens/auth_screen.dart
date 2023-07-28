@@ -93,7 +93,7 @@ class AuthCard extends StatefulWidget {
   _AuthCardState createState() => _AuthCardState();
 }
 
-class _AuthCardState extends State<AuthCard> {
+class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey();
   AuthMode _authMode = AuthMode.login;
   final Map<String, String> _authData = {
@@ -104,6 +104,13 @@ class _AuthCardState extends State<AuthCard> {
   final _passwordController = TextEditingController();
   late AnimationController _controller;
   late Animation<Size> _heightAnimation;
+
+  @override
+  void initState() {
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
+    _heightAnimation = Tween<Size>(begin: Size(double.infinity, 260,), end: Size(double.infinity, 320)).animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
+    super.initState();
+  }
 
   void _showErrorDialogue (String message){
     showDialog(context: context, builder: (context) => AlertDialog(
