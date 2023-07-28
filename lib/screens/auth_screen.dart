@@ -109,6 +109,7 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
   void initState() {
     _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
     _heightAnimation = Tween<Size>(begin: const Size(double.infinity, 260,), end: const Size(double.infinity, 320)).animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
+    _heightAnimation.addListener(() => setState(() {}));
     super.initState();
   }
 
@@ -173,11 +174,13 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
     if (_authMode == AuthMode.login) {
       setState(() {
         _authMode = AuthMode.signUp;
+        _controller.forward();
       });
     } else {
       setState(() {
         _authMode = AuthMode.login;
       });
+      _controller.reverse();
     }
   }
 
@@ -193,7 +196,7 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
         //height: _authMode == AuthMode.signUp ? 320 : 260,
         height: _heightAnimation.value.height,
         constraints:
-            BoxConstraints(minHeight: _authMode == AuthMode.signUp ? 320 : 260),
+            BoxConstraints(minHeight: _heightAnimation.value.height),
         width: deviceSize.width * 0.75,
         padding: const EdgeInsets.all(16.0),
         child: Form(
