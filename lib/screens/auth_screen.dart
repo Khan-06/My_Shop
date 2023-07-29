@@ -93,7 +93,8 @@ class AuthCard extends StatefulWidget {
   _AuthCardState createState() => _AuthCardState();
 }
 
-class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin {
+class _AuthCardState extends State<AuthCard>
+    with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey();
   AuthMode _authMode = AuthMode.login;
   final Map<String, String> _authData = {
@@ -107,27 +108,39 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
 
   @override
   void initState() {
-    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
-    _heightAnimation = Tween<Size>(begin: const Size(double.infinity, 260,), end: const Size(double.infinity, 320)).animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
-    _heightAnimation.addListener(() => setState(() {}));
+    _controller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 300));
+    _heightAnimation = Tween<Size>(
+            begin: const Size(
+              double.infinity,
+              260,
+            ),
+            end: const Size(double.infinity, 320))
+        .animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
+    //_heightAnimation.addListener(() => setState(() {}));
     super.initState();
   }
+
   @override
   void dispose() {
     super.dispose();
     _controller.dispose();
   }
 
-  void _showErrorDialogue (String message){
-    showDialog(context: context, builder: (context) => AlertDialog(
-      title: const Text('An Error Occurred!'),
-      content: Text(message),
-      actions: [
-        TextButton(onPressed: (){
-          Navigator.pop(context);
-        }, child: const Text('Close'))
-      ],
-    ));
+  void _showErrorDialogue(String message) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: const Text('An Error Occurred!'),
+              content: Text(message),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Close'))
+              ],
+            ));
   }
 
   Future<void> _submit() async {
@@ -151,20 +164,17 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
       }
     } on HttpException catch (error) {
       var errorMessage = 'Authentication Failed';
-      if(error.message.contains('EMAIL_EXISTS')){
+      if (error.message.contains('EMAIL_EXISTS')) {
         errorMessage = 'This email address is already in use.';
-      }
-      else if(error.message.contains('INVALID_EMAIL')){
+      } else if (error.message.contains('INVALID_EMAIL')) {
         errorMessage = 'Email is Invalid';
-      }
-      else if(error.message.contains('WEAK_PASSWORD')){
+      } else if (error.message.contains('WEAK_PASSWORD')) {
         errorMessage = 'Your password is weak';
-      }
-      else if(error.message.contains('EMAIL_NOT_FOUND')){
+      } else if (error.message.contains('EMAIL_NOT_FOUND')) {
         errorMessage = 'Could not find the user with that email';
-    } else if(error.message.contains('INVALID_PASSWORD')){
+      } else if (error.message.contains('INVALID_PASSWORD')) {
         errorMessage = 'Invalid Password';
-    }
+      }
       _showErrorDialogue(errorMessage);
     } catch (error) {
       var errorMessage = error.toString();
@@ -197,13 +207,16 @@ class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin
         borderRadius: BorderRadius.circular(10.0),
       ),
       elevation: 8.0,
-      child: Container(
-        //height: _authMode == AuthMode.signUp ? 320 : 260,
-        height: _heightAnimation.value.height,
-        constraints:
-            BoxConstraints(minHeight: _heightAnimation.value.height),
-        width: deviceSize.width * 0.75,
-        padding: const EdgeInsets.all(16.0),
+      child: AnimatedBuilder(
+        animation: _heightAnimation,
+        builder: (context, ch) => Container(
+            //height: _authMode == AuthMode.signUp ? 320 : 260,
+            height: _heightAnimation.value.height,
+            constraints:
+                BoxConstraints(minHeight: _heightAnimation.value.height),
+            width: deviceSize.width * 0.75,
+            padding: const EdgeInsets.all(16.0),
+            child: ch),
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
