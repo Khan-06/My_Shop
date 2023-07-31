@@ -249,21 +249,26 @@ class _AuthCardState extends State<AuthCard>
                     _authData['password'] = value!;
                   },
                 ),
-                  FadeTransition(
-                    opacity: _opacityAnimation,
-                    child: TextFormField(
-                      enabled: _authMode == AuthMode.signUp,
-                      decoration:
-                          const InputDecoration(labelText: 'Confirm Password'),
-                      obscureText: true,
-                      validator: _authMode == AuthMode.signUp
-                          ? (value) {
-                              if (value != _passwordController.text) {
-                                return 'Passwords do not match!';
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    constraints: BoxConstraints(minHeight:  _authMode == AuthMode.signUp ? 60 : 0, maxHeight:  _authMode == AuthMode.signUp ? 120 : 0),
+                    curve: Curves.easeIn,
+                    child: FadeTransition(
+                      opacity: _opacityAnimation,
+                      child: TextFormField(
+                        enabled: _authMode == AuthMode.signUp,
+                        decoration:
+                            const InputDecoration(labelText: 'Confirm Password'),
+                        obscureText: true,
+                        validator: _authMode == AuthMode.signUp
+                            ? (value) {
+                                if (value != _passwordController.text) {
+                                  return 'Passwords do not match!';
+                                }
+                                return null;
                               }
-                              return null;
-                            }
-                          : null,
+                            : null,
+                      ),
                     ),
                   ),
                 const SizedBox(
