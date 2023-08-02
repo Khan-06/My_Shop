@@ -67,19 +67,3 @@ class ProductItem extends StatelessWidget {
     );
   }
 }
-
-//
-// Flushbar(
-// title: 'Product Added',
-// icon: Icon(Icons.check_circle, color: Theme.of(context).colorScheme.primary),
-// message: '${product.title} added to your cart',
-// duration: const Duration(seconds: 2),
-// margin: const EdgeInsets.all(5),
-// borderRadius: BorderRadius.circular(20),
-// mainButton: ElevatedButton(
-// onPressed: () {
-// cart.removeSingleItem(product.id);
-// },
-// child: const Text('Undo'),
-// // ),
-// ).show(context);
