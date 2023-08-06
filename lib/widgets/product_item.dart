@@ -13,7 +13,6 @@ import './pop_up_bottomBar.dart';
 class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
     final authData = Provider.of<Auth>(context);
@@ -26,7 +25,8 @@ class ProductItem extends StatelessWidget {
           leading: Consumer<Product>(
             builder: (context, value, child) => IconButton(
               onPressed: () {
-                product.toggleFavorite(authData.token.toString(), authData.userId.toString());
+                product.toggleFavorite(
+                    authData.token.toString(), authData.userId.toString());
               },
               icon: Icon(
                 product.isFavorite
@@ -46,7 +46,8 @@ class ProductItem extends StatelessWidget {
                 title: 'Product Added',
                 message: '${product.title} added to your cart',
                 ctx: context,
-                icon: Icon(Icons.check_circle, color: Theme.of(context).colorScheme.primary),
+                icon: Icon(Icons.check_circle,
+                    color: Theme.of(context).colorScheme.primary),
                 button: ElevatedButton(
                   onPressed: () => cart.removeSingleItem(product.id),
                   child: const Text('Undo'),
@@ -61,7 +62,15 @@ class ProductItem extends StatelessWidget {
             Navigator.pushNamed(context, ProductDetails.routeName,
                 arguments: product.id);
           },
-          child: FadeInImage(placeholder: const AssetImage('assets/images/product-placeholder.png'), image: NetworkImage(product.imageUrl), fit: BoxFit.cover,),
+          child: Hero(
+            tag: product.id,
+            child: FadeInImage(
+              placeholder:
+                  const AssetImage('assets/images/product-placeholder.png'),
+              image: NetworkImage(product.imageUrl),
+              fit: BoxFit.cover,
+            ),
+          ),
         ),
       ),
     );

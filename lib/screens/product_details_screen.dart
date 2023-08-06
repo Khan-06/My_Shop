@@ -22,9 +22,12 @@ class ProductDetails extends StatelessWidget {
           SizedBox(
             height: MediaQuery.of(context).size.height / 2,
             width: double.infinity,
-            child: Image.network(
-              productData.imageUrl,
-              fit: BoxFit.cover,
+            child: Hero(
+              tag: productId,
+              child: Image.network(
+                productData.imageUrl,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           const SizedBox(height: 10),
