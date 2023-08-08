@@ -44,8 +44,9 @@ class Products with ChangeNotifier {
   var _showFavoritesOnly = false;
   final String authToken;
   final String userID;
-
   Products(this.authToken, this.userID ,this._items);
+
+
 
   List<Product> get items {
     if (_showFavoritesOnly) {

@@ -14,41 +14,50 @@ class ProductDetails extends StatelessWidget {
         product.items.firstWhere((element) => element.id == productId);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(productData.title),
-      ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height / 2,
-            width: double.infinity,
-            child: Hero(
-              tag: productId,
-              child: Image.network(
-                productData.imageUrl,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Column(
-            children: [
-              Text(
-                '\$${productData.price}',
-                style: const TextStyle(color: Colors.grey, fontSize: 20), //Starting the module
-              ),
-              const SizedBox(height: 10),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                width: MediaQuery.of(context).size.width,
-                child: Text(
-                  productData.description,
-                  textAlign: TextAlign.center,
-                  softWrap: true,
+      // appBar: AppBar(
+      //   title: Text(productData.title),
+      // ),
+      body: CustomScrollView(
+        slivers: [
+           SliverAppBar(
+            expandedHeight: 300,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Hero(
+                tag: productId,
+                child: Image.network(
+                  productData.imageUrl,
+                  fit: BoxFit.cover,
                 ),
               ),
-            ],
+              title: Text(productData.title),
+            ),
           ),
+          SliverList(
+              delegate: SliverChildListDelegate([
+            const SizedBox(height: 10),
+            Column(
+              children: [
+                Text(
+                  '\$${productData.price}',
+                  style: const TextStyle(
+                      color: Colors.grey, fontSize: 20), //Starting the module
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  width: MediaQuery.of(context).size.width,
+                  child: Text(
+                    productData.description,
+                    textAlign: TextAlign.center,
+                    softWrap: true,
+                  ),
+                ),
+                const SizedBox(height: 2000,)
+              ],
+            ),
+          ]))
         ],
       ),
     );
