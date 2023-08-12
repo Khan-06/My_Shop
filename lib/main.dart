@@ -7,6 +7,8 @@ import './providers/cart.dart';
 import './providers/products.dart';
 import './providers/orders.dart';
 
+import './helpers/custom_route.dart';
+
 import './screens/orders_screen.dart';
 import './screens/user_product_screen.dart';
 import './screens/edit_products_screen.dart';
@@ -53,6 +55,10 @@ class MyApp extends StatelessWidget {
                   debugShowCheckedModeBanner: false,
                   title: 'MyShop',
                   theme: ThemeData.light().copyWith(
+                      pageTransitionsTheme: PageTransitionsTheme(builders: {
+                        TargetPlatform.android: CustomPageTransitionBuilder(),
+                        TargetPlatform.iOS: CustomPageTransitionBuilder(),
+                      }),
                       colorScheme:
                           ColorScheme.fromSwatch(primarySwatch: Colors.orange)
                               .copyWith(secondary: Colors.amber),
