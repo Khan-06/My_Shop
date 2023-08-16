@@ -42,7 +42,7 @@ class Auth with ChangeNotifier {
           {'email': email, 'password': password, 'returnSecureToken': true},
         ),
       );
-      print(json.decode(response.body));
+      // print(json.decode(response.body));
       final responseData = json.decode(response.body);
       if (responseData == null) {
         throw HttpException(responseData['error']['message']);
