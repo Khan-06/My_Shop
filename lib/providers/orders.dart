@@ -80,7 +80,7 @@ class Orders with ChangeNotifier {
           })
               .toList()
         }));
-    print(response.body);
+    //print(response.body);
     _orders.insert(
       0,
       OrderItem(
