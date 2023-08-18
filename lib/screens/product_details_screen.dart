@@ -19,7 +19,7 @@ class ProductDetails extends StatelessWidget {
       // ),
       body: CustomScrollView(
         slivers: [
-           SliverAppBar(
+          SliverAppBar(
             expandedHeight: 300,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
@@ -30,7 +30,16 @@ class ProductDetails extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-              title: Text(productData.title),
+              title: Container(
+                alignment: Alignment.bottomRight,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Colors.black38,
+                ),
+                width: MediaQuery.of(context).size.width / 3,
+                height: MediaQuery.of(context).size.height / 20,
+                child: Center(child: Text(productData.title)),
+              ),
             ),
           ),
           SliverList(
@@ -54,7 +63,9 @@ class ProductDetails extends StatelessWidget {
                     softWrap: true,
                   ),
                 ),
-                const SizedBox(height: 2000,)
+                const SizedBox(
+                  height: 2000,
+                )
               ],
             ),
           ]))
